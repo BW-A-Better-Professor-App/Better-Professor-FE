@@ -5,10 +5,10 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 const Login = () => {
   const history = useHistory();
 
-  const [ login, setLogin ] = ({
+  const [ login, setLogin ] = useState({
     username: '',
     password: ''
-  });
+  })
 
   const handleChange = e => {
     setLogin({
@@ -61,6 +61,4 @@ const Login = () => {
 
 export default Login;
 
-
-}
 
