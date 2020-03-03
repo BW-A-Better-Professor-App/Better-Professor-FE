@@ -1,9 +1,11 @@
 import React from "react";
 
-const StudentCard = ({firstname }) => {
+const StudentCard = props => {
+  const firstname= props.name;
+  console.log('this is first name: ', firstname)
   return (
     <div>
-      <h2>{firstname}</h2>
+      <h1>{props.name}</h1>
 
     </div>
   );

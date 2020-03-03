@@ -34,13 +34,14 @@ export default function StudentList() {
             <div>
             {students.map(student => (
               <div key={student.id}>
-                {/* <StudentCard */}
+              
+                <StudentCard name={student.firstname} />
                 
-                <h2>name={student.firstname}</h2>
+                
                 {/* // assignments={student.assignments}
                 // dueDate={student.assignments.dueDates}
                 // notes={student.notes} */}
-                {/* /> */}
+              
               </div>
             ))}
             </div>

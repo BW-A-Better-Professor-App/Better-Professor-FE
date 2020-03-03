@@ -8,7 +8,7 @@ import PrivateRoute from '../utils/PrivateRoute';
 export default function TeacherDashboard() {
     return(
         <div>
-        <StudentList />
+          <StudentList />
           <UpcomingDeadlines />
 
         
