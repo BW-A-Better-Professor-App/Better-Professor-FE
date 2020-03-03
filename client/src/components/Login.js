@@ -21,9 +21,10 @@ const Login = () => {
     e.preventDefault();
     console.log('what are we posting to login: ', login)
     axiosWithAuth()
-      .post('/login', login)
+      .post('/auth/login', login)
       .then(res => {
         console.log('this is the response from post: ', res);
+        console.log("token", res.data.payload)
         window.localStorage.setItem('token', res.data.payload);
         history.push('/dashboard');
       })
