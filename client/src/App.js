@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Header from './components/Header'
+import Register from "./components/Registration"
 import './App.css';
 
 function App() {
@@ -10,11 +11,12 @@ function App() {
     <div className="App">
       <Router>
         <Header />
-        <Route exact path = '/'>
+        <Route  path = '/Login'>
           <Login />
         </Route>
-
-
+        <Route  exact path = '/'>
+         <Register/>
+        </Route>
 
       </Router>
      
