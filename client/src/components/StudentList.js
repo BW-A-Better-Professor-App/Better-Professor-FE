@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
 import StudentCard from './StudentCard'
-import data from './data.js'
+import { axiosWithAuth } from '../utils/axiosWithAuth';
+// import data from './data.js'
 
 const data = [
   { name: 'John Smith', task: 'Review Term Paper', Date: 'March 10th'},
@@ -16,11 +17,11 @@ export default function StudentList() {
     useEffect(() => {
       // setStudents(data);
       // console.log("dummy students: ", students)
-        axios
-        .get(``)
+        axiosWithAuth()
+        .get(`/users`)
         .then(response => {
-            console.log('response', response.___);
-            setStudents(response.__);
+            console.log('response of tasks', response);
+              setStudents(response.data);
         })
         .catch(err => {
             console.log('error, go fix!', err);
@@ -32,13 +33,15 @@ export default function StudentList() {
             {/* <SearchFrom /> */}
             <div>
             {students.map(student => (
-                <StudentCard
-                key={student.id}
-                name={student.name}
-                assignments={student.assignments}
-                dueDate={student.assignments.dueDates}
-                notes={student.notes}
-                />
+              <div key={student.id}>
+                {/* <StudentCard */}
+                
+                <h2>name={student.firstname}</h2>
+                {/* // assignments={student.assignments}
+                // dueDate={student.assignments.dueDates}
+                // notes={student.notes} */}
+                {/* /> */}
+              </div>
             ))}
             </div>
         </section>
