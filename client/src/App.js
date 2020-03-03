@@ -11,11 +11,11 @@ function App() {
     <div className="App">
       <Router>
         <Header />
-        <Route  eaxct path = '/Login'>
+        <Route  exact path = '/Login'>
           <Login />
         </Route>
         <Route  exact path = '/'>
-         <Register/>
+          <Register/>
         </Route>
 
       </Router>

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Login from './Login'
 import { Link } from 'react-router-dom'
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 function Register(props) {
 
@@ -14,11 +15,11 @@ function Register(props) {
     // state for new user to be created
     const [newUser, setNewUser] = useState({
         username: '',
-        first_name: '',
-        last_name: '',
+        firstname: '',
+        lastname: '',
         email: '',
         password: '',
-        phone_number: ''
+        // phone_number: ''
     });
 
     const [errorText, setErrorText] = useState('');
@@ -26,6 +27,8 @@ function Register(props) {
 
     // input change handler
     const handleChange = (e) => {
+
+        console.log("this is the newUser: ", newUser)
 
         // update new user state
         setNewUser({
@@ -35,48 +38,45 @@ function Register(props) {
     }
 
     let cb = (user) => {
-        if (newUser.username === "" ||
-            newUser.password === "" ||
-            newUser.phone_number === "" ||
-            newUser.email === "" ||
-            newUser.first_name === "" ||
-            newUser.last_name === "" ) {
+        if (user.username === "" ||
+            user.password === "" ||
+            // newUser.phone_number === "" ||
+            user.email === "" ||
+            user.firstname === "" ||
+            user.lastname === "" ) {
             setErrorText("Please fill out all fields!");
         }
-        else if (newUser.username.length < 4 || newUser.username.length > 12) {
+        else if (user.username.length < 4 || user.username.length > 12) {
             setErrorText("Your username must be at least 4 characters, and no longer than 12.");
             return;
         }
-        else if (newUser.password.length < 4 || newUser.password.length >= 32) {
+        else if (user.password.length < 4 || user.password.length >= 32) {
             setErrorText("Your password must be between 4 and 32 characters.")
             return;
         }
-        else if (newUser.phone_number.match(/[^0-9]/gi, '') || newUser.phone_number.length !== 10) {
-            setErrorText("Please enter a valid 10 digit phone number.");
-            return;
-        }
+  
 
-        axios.post("", user)
+        axiosWithAuth()
+        .post('/auth/register', user)
             .then((res) => {
-                console.log(res);
+                console.log("this is registration response: ", res);
                 setNewUser({
                     username: '',
-                    first_name: '',
-                    last_name: '',
+                    firstname: '',
+                    lastname: '',
                     email: '',
                     password: '',
-                    phone_number: ''
                 });
+                console.log("token", res.data.payload)
+                window.localStorage.setItem('token',)
                 setSuccessText('Success...');
                 history.push(`/Login`);
-               
             })
             .catch((err) => {
                 console.log(err)
             });
     }
 
-  
     return (
         <Container>
 
@@ -88,26 +88,26 @@ function Register(props) {
             {/* Register Form */}
             <form onSubmit={(e) => {
                 e.preventDefault();
-                // register(newUser);
+
                 cb(newUser);
             }}>
                   <input
                     type="text"
-                    name="first_name"
+                    name="firstname"
                     placeholder="First Name"
-                    value={newUser.first_name}
+                    value={newUser.firstname}
                     onChange={handleChange}
                     autoComplete="off"
                 />
                  <input
                     type="text"
-                    name="last_name"
+                    name="lastname"
                     placeholder="Last Name"
-                    value={newUser.last_name}
+                    value={newUser.lastname}
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                 <input
+                <input
                     type="text"
                     name="username"
                     placeholder="Username"
@@ -115,7 +115,7 @@ function Register(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                  <input
+                <input
                     type="text"
                     name="email"
                     placeholder="Email"
@@ -131,14 +131,14 @@ function Register(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                <input
+                {/* <input
                     type="tel"
                     name="phone_number"
                     placeholder="Phone #"
                     value={newUser.phone_number}
                     onChange={handleChange}
                     autoComplete="off"
-                />
+                /> */}
                 <button type="submit">Register</button>
                 <div className="extra-options">
                     <Link to= './Login' className="FormField_Link">Already have an account? Login</Link>
