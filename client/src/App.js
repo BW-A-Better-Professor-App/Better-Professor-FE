@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Router>
         <Header />
-        <Route  path = '/Login'>
+        <Route  eaxct path = '/Login'>
           <Login />
         </Route>
         <Route  exact path = '/'>
