@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import StudentCard from './StudentCard'
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+import { useHistory } from 'react-router-dom';
 // import data from './data.js'
 
 const data = [
@@ -13,6 +14,12 @@ const data = [
 ]
 export default function StudentList() {
     const [students, setStudents] =  useState([])
+    const history = useHistory();
+    const routeToStudent = (ev, student) => {
+      ev.preventDefault();
+      history.push(`/dashboard/${student.id}`);
+    }
+
 
     useEffect(() => {
       // setStudents(data);
@@ -20,7 +27,7 @@ export default function StudentList() {
         axiosWithAuth()
         .get(`/users`)
         .then(response => {
-            console.log('response of tasks', response);
+            console.log('response of users on student list', response);
               setStudents(response.data);
         })
         .catch(err => {
@@ -33,9 +40,10 @@ export default function StudentList() {
             {/* <SearchFrom /> */}
             <div>
             {students.map(student => (
-              <div key={student.id}>
+              <div onClick={ev => routeToStudent(ev, student)} key={student.id}>
               
-                <h1>{student.firstname}</h1> 
+                <h1>{student.firstname} {student.lastname}</h1> 
+                
                 
                 
                 {/* // assignments={student.assignments}

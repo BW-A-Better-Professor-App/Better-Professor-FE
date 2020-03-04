@@ -39,7 +39,7 @@ const App = props => {
     axiosWithAuth()
     .get(`/users`)
     .then(res => {
-      console.log("this is the response", res);
+      console.log("this is the response of gets", res);
       setStudentList(res.data)
 
     })

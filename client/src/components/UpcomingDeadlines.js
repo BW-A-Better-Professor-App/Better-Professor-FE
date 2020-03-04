@@ -51,10 +51,13 @@ export default function UpcomingDeadlines() {
             axiosWithAuth()
             .get(`/tasks`)
             .then(response => {
+                const taskArray = response.data.filter(data => data.task === "null");
+                console.log('This is the task array', taskArray)
+                console.log('this is the response from task get call', response)
                 setDeadlines(response.data);
             })
             .catch(err => {
-                console.log('unable to fetch deadlines', err);
+                console.log('unable to fetch task projects', err);
             })
         }, []);
 
@@ -69,7 +72,7 @@ export default function UpcomingDeadlines() {
 
     //     </div>
     // )
-
+        // console.log("this is taskArray", taskArray)
     return (
         <TableContainer component={Paper}>
           <Table  size="small" aria-label="a dense table">
@@ -82,7 +85,7 @@ export default function UpcomingDeadlines() {
             </TableHead>
             <TableBody>
               {deadlines.map(deadline => (
-                <TableRow key={deadline.id}>
+                <TableRow key={deadline.task_id}>
                   {/* <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell> */}
