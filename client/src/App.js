@@ -14,24 +14,30 @@ import StudentCard from './components/StudentCard';
 import StudentList from './components/StudentList';
 import { axiosWithAuth } from './utils/axiosWithAuth';
 
+const initialStudent = {
+  username: '',
+  firstname: '',
+  lastname: '',
+  email: '',
+  password: '',
+
+}
+
+
 const App = props => {
   // let history = useHistory();
-  const [student, setStudent ] = useState({
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: '',
-
-  })
+  const [student, setStudent ] = useState(initialStudent)
 
   const [ studentList, setStudentList ] = useState([]);
-  
 
+  const [editing, setEditing] = useState(false);
+  const [studentToEdit, setStudentToEdit] = useState(initialStudent);
+  // const [edit, setEdit] = useState(false)
 
+  //useEffect grabs student list and should update if new student is added or if student is edited
   useEffect(()=> {
     axiosWithAuth()
-    .get()
+    .get(`/users`)
     .then(res => {
       console.log("this is the response", res);
       setStudentList(res.data)
@@ -41,7 +47,36 @@ const App = props => {
       console.error("there was an error: ", err);
     })
 
-  }, [student]);
+  }, [student, editing]);
+
+
+  //function that when called sets editing to true and sets StudentToEdit to student that is passed in 
+  const editStudent = student => {
+    setEditing(true);
+    setStudentToEdit(student);
+  };
+
+  //save the edit by doing a put call
+  const saveEdit = e => {
+    e.preventDefault();
+
+    axiosWithAuth()
+      .put(`/${studentToEdit.id}`, studentToEdit)
+      .then(res => {
+        console.log("response from put: ", res);
+        setStudentList(studentList);
+        setEditing(false);
+        // setEdit(true);
+      })
+      .catch(err => {
+        console.log("error: ", err);
+      });
+  };
+
+  
+
+
+
 
   const handleChanges = e => {
     setStudent({ ...student, [e.target.name]: e.target.value });
@@ -67,11 +102,14 @@ const App = props => {
         .delete(`/${student.id}`)
         .then(res => {
           alert("Deleted Student")
+          props.history.push("/dashboard")
         })
         .catch(err => alert("Error couldn't delete: ", err))
+
         // .finally(() => window.location.reload())
   }
 
+  //add student that is passed in to the array of students by registering them.
   const addStudent = student => {
     const newStudent = {
       username: student.username,
