@@ -13,23 +13,24 @@ const Login = () => {
   const handleChange = e => {
     setLogin({
       ...login, 
-      [e.target.name ]: e.target.value
+      [e.target.name]: e.target.value
     })
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('what are we posting to login: ', login)
+    console.log('what are we posting to login: ', login);
     axiosWithAuth()
-      .post('/login', login)
+      .post('/auth/login', login)
       .then(res => {
         console.log('this is the response from post: ', res);
-        window.localStorage.setItem('token', res.data.payload);
+        console.log("token", res.data.token)
+        window.localStorage.setItem('token', res.data.token);
         history.push('/dashboard');
       })
       .catch(err => {
         console.log('there was an error with login: ', err)
-      })
+      });
 
   }
   return (

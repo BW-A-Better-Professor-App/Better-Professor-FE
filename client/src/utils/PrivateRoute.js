@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = ({component: Component, ...rest}) => {
+const PrivateRoute = ({ component: Component, ...rest}) => {
 
 
   return (
@@ -9,7 +9,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
       { ...rest }
       render={props =>
         window.localStorage.getItem('token') ? (
-          <Component { ...props } />
+          <Component {...props} />
         ) : (
           <Redirect to='/'/>
         )

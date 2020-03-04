@@ -1,7 +1,13 @@
-import React from  'react';
+import React from "react";
 
-export default function StudentCard(props){
-    return(
-        <h2>{props.name}</h2>
-    );
+const StudentCard = props => {
+  const firstname= props.name;
+  console.log('this is first name: ', firstname)
+  return (
+    <div>
+      <h1>{props.name}</h1>
+
+    </div>
+  );
 };
+export default StudentCard;
