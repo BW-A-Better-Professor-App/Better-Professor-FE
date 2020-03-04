@@ -35,7 +35,7 @@ export default function StudentList() {
             {students.map(student => (
               <div key={student.id}>
               
-                <StudentCard name={student.firstname} />
+                <h1>{student.firstname}</h1> 
                 
                 
                 {/* // assignments={student.assignments}
