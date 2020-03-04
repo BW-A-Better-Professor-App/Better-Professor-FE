@@ -55,7 +55,7 @@ function Register(props) {
             return;
         }
   
-
+        console.log("this is what is being registered: ", user)
         axiosWithAuth()
         .post('/auth/register', user)
             .then((res) => {
