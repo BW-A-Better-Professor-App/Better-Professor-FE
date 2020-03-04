@@ -4,6 +4,7 @@ import UpcomingDeadlines from './UpcomingDeadlines';
 import PrivateRoute from '../utils/PrivateRoute';
 import styled from 'styled-components';
 import StudentCard from './StudentCard'
+import AddStudent from './AddStudent'
 
 
 const StyledDiv = styled.div`
@@ -53,28 +54,29 @@ width: 20%;
 
 
 export default function TeacherDashboard() {
+  const id = localStorage.getItem('id');
     return(
         <div>
             {/* <StyledBtnDiv>
             <StyledBtn>Add Student</StyledBtn>
-           <StyledBtn>View Student</StyledBtn>
+            <StyledBtn>View Student</StyledBtn>
             </StyledBtnDiv> */}
             <StyledBtnDiv>
             <button>View Students</button>
-            <button>Add Student</button>
+            <AddStudent />
             </StyledBtnDiv>
            
            
            <StyledDiv> 
            <StudentListDiv>
-           <PrivateRoute  exact path = '/dashboard'>
+           {/* <PrivateRoute  exact path = '/dashboard'> */}
           <StudentList />
-          </PrivateRoute>
+          {/* </PrivateRoute> */}
           </StudentListDiv>
           <TaskTableDiv>
-           <PrivateRoute  exact path = '/dashboard'>
+           {/* <PrivateRoute  exact path = '/dashboard'> */}
            <UpcomingDeadlines />
-          </PrivateRoute>
+          {/* </PrivateRoute> */}
           </TaskTableDiv>
          
           </StyledDiv>    
