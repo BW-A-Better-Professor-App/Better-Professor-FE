@@ -20,9 +20,6 @@ font-style: normal;
 font-weight: normal;
 font-size: 20px;
 line-height: 42px;
-display: flex;
-align-items: center;
-text-align: center;
 color: #000000;
 `;
 
@@ -83,16 +80,27 @@ export default function UpcomingDeadlines() {
     // )
         // console.log("this is taskArray", taskArray)
     return (
-        <TableContainer component={Paper}>
+        <TableContainer className="table_container" component={Paper}>
           <Table  size="small" aria-label="a dense table">
-            <TableHead>
+            <TableHead className="table_head">
               <TableRow>
-                <TableCell align="right">Name</TableCell>
-                <TableCell align="right">Task</TableCell>
-                <TableCell align="right">Due Date</TableCell>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Task</TableCell>
+                <TableCell align="center">Due Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
+
+//               {rows.map(row => (
+//                 <TableRow key={row.id}>
+//                   {/* <TableCell component="th" scope="row">
+//                     {row.name}
+//                   </TableCell> */}
+//                   <TableCell align="center">{row.Name}</TableCell>
+//                   <TableCell align="center">{row.Task}</TableCell>
+//                   <TableCell align="center">{row.DueDate}</TableCell>
+//                   <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
+
                {deadlines.map(deadline => (
                 <TableRow key={deadline.task_id}>
                   <TableCell component="th" scope="row">
@@ -102,6 +110,7 @@ export default function UpcomingDeadlines() {
                   <TableCell align="right">{deadline.task}</TableCell>
                   <TableCell align="right">{deadline.duedate}</TableCell>
                   <TableCell align="right"><StyledBtn>View</StyledBtn></TableCell>
+
                 </TableRow>
               ))}
             </TableBody>

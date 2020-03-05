@@ -15,6 +15,7 @@ import StudentCard from './components/StudentCard';
 import StudentList from './components/StudentList';
 import AddStudent from './components/AddStudent';
 import { axiosWithAuth } from './utils/axiosWithAuth';
+import StudentDetails from './components/StudentDetails'
 
 const initialStudent = {
   username: '',
@@ -170,10 +171,15 @@ const App = props => {
           <PrivateRoute path="/student-registration/">
             <AddStudent />
           </PrivateRoute>
+
+          <PrivateRoute path="/student-details">
+            <StudentDetails/>
           </PrivateRoute>
+
           <Route  exact path = '/'>
             <Register/>
           </Route>
+
 
         </Router>
       </StudentFormContext.Provider>
