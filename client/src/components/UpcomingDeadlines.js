@@ -48,11 +48,11 @@ export default function UpcomingDeadlines() {
         const [deadlines, setDeadlines] = useState([])
 
         useEffect(() => {
+            console.log("get tasks coming");
             axiosWithAuth()
             .get(`/tasks`)
             .then(response => {
-                const taskArray = response.data.filter(data => data.task === "null");
-                console.log('This is the task array', taskArray)
+                
                 console.log('this is the response from task get call', response)
                 setDeadlines(response.data);
             })
@@ -60,6 +60,15 @@ export default function UpcomingDeadlines() {
                 console.log('unable to fetch task projects', err);
             })
         }, []);
+
+
+        if(!Array.isArray(deadlines)){
+            return(
+               <div>
+                   <h2>No array</h2>
+               </div>
+
+            )}else{
 
     // return(
     //     <div className='upcoming-deadlines'>
@@ -84,11 +93,11 @@ export default function UpcomingDeadlines() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {deadlines.map(deadline => (
+               {deadlines.map(deadline => (
                 <TableRow key={deadline.task_id}>
-                  {/* <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell> */}
+                  <TableCell component="th" scope="row">
+                    {/* {row.name} */}
+                  </TableCell>
                   <TableCell align="right">{deadline.firstname}</TableCell>
                   <TableCell align="right">{deadline.task}</TableCell>
                   <TableCell align="right">{deadline.duedate}</TableCell>
@@ -99,4 +108,5 @@ export default function UpcomingDeadlines() {
           </Table>
         </TableContainer>
       );
+               }
 }

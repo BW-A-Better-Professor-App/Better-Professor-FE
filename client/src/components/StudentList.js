@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios'
+import { StudentFormContext } from '../contexts/StudentFormContext';
+
 
 import StudentCard from './StudentCard'
 import { axiosWithAuth } from '../utils/axiosWithAuth';
@@ -13,6 +15,9 @@ const data = [
   { name: 'John lamoni', task: 'Review Term Paper', Date: 'March 16th'},
 ]
 export default function StudentList() {
+    const id = localStorage.getItem('id');
+    const { adding, setAdding } = useContext(StudentFormContext)
+
     const [students, setStudents] =  useState([])
     const history = useHistory();
     const routeToStudent = (ev, student) => {
@@ -25,15 +30,16 @@ export default function StudentList() {
       // setStudents(data);
       // console.log("dummy students: ", students)
         axiosWithAuth()
-        .get(`/users`)
+        .get(`/users/all-students/${id}`)
         .then(response => {
             console.log('response of users on student list', response);
-              setStudents(response.data);
+              setStudents(response.data.student);
+              setAdding(false)
         })
         .catch(err => {
             console.log('error, go fix!', err);
         })
-    }, []);
+    }, [adding]);
 
     return (
         <section className="student-list">

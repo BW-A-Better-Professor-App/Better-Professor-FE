@@ -1,5 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {axiosWithAuth} from "../utils/axiosWithAuth";
+
+import { StudentFormContext } from '../contexts/StudentFormContext';
+
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -74,21 +77,23 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
-
+const id = parseInt(localStorage.getItem('id'),10);
 const initialValues = {
   firstname: "",
   lastname: "",
   email: "",
   username: "",
-  password: ""
+  password: "",
+  professor_id: id,
 }
 
 const AddStudent = props => {
+  const { setAdding } = useContext(StudentFormContext)
   const classes = useStyles();
   const [studentInfo, setStudentInfo] = useState(initialValues)
   
   const [open, setOpen] = useState(false);
-  const id = localStorage.getItem('id');
+  
   const studentArrayLength = 0;
 
   const handleOpen = () => {
@@ -106,12 +111,14 @@ const AddStudent = props => {
   const FormSubmit = (e) => {
     e.preventDefault()
     console.log("These are values", studentInfo);
+    // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .post(`/api/auth/register/${id}`, studentInfo)
+      .post(`/auth/register/${id}`, studentInfo)
         .then(res => {
           console.log("success", res);
           console.log("this is response from add student", res)
+          setAdding(true)
           handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));
