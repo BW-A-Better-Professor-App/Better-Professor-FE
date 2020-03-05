@@ -28,33 +28,16 @@ const data = [
   { name: 'John lamoni', task: 'Review Term Paper', Date: 'March 16th'},
 ]
 export default function StudentList() {
-    const id = localStorage.getItem('id');
-    const { adding, setAdding } = useContext(StudentFormContext)
+  const id = parseInt(localStorage.getItem('id'),10);
+    const { deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, studentList, setStudentList } = useContext(StudentFormContext)
 
-    const [students, setStudents] =  useState([])
+    // const [students, setStudents] =  useState([])
     const history = useHistory();
-    const routeToStudent = (ev, student) => {
-      ev.preventDefault();
-      history.push(`/dashboard/${student.id}`);
-    }
+    console.log("this is the student list from context to studentlist.js", studentList)
 
 
-    useEffect(() => {
-      // setStudents(data);
-      // console.log("dummy students: ", students)
-        axiosWithAuth()
-        .get(`/users/all-students/${id}`)
-        .then(response => {
-            console.log('response of users on student list', response);
-              setStudents(response.data.student);
-              // window.localStorage.setItem('professor_id', response.data.student.professor_id)
-              // window.localStorage.setItem('student_id', response.data.student.student_id)
-              setAdding(false)
-        })
-        .catch(err => {
-            console.log('error, go fix!', err);
-        })
-    }, [adding]);
+
+
 
     return (
 
@@ -67,26 +50,32 @@ export default function StudentList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(student => (
+            {/* {data.map(student => (
               <TableRow key={student.id}>
                 {/* <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell> */}
-                <TableCell align="center">{student.name}</TableCell>
+                {/* <TableCell align="center">{student.name}</TableCell> */}
 
-//         <section className="student-list">
-//             {/* <SearchFrom /> */}
-//             <div>
-//             {students.map(student => (
-//               <div onClick={ev => routeToStudent(ev, student)} key={student.id}>
+          {/* <section className="student-list">
+                {/* <SearchFrom /> */}
+                {/* <div> */}
+                <TableRow onClick={ev => resetActiveStudent(ev)}>
+                  <TableCell align="center">All Students</TableCell>
+                </TableRow>
+                {studentList.map(student => (
+                  <TableRow onClick={ev => makeStudentActive(ev, student)} key={student.student_id}>
+                  
+                    <TableCell>{student.firstname} {student.lastname} </TableCell> 
+                    </TableRow>
+                  
+                
+                
+
+                
               
-//                 <h1>{student.firstname} {student.lastname}</h1> 
-                
-                
-
-                
-              </TableRow>
             ))}
+           
           </TableBody>
         </Table>
       </TableContainer>

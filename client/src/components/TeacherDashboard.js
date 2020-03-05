@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import StudentList from './StudentList';
 import UpcomingDeadlines from './UpcomingDeadlines';
 import PrivateRoute from '../utils/PrivateRoute';
@@ -8,6 +8,9 @@ import StudentCard from './StudentCard'
 import { Link } from 'react-router-dom'
 import StudentDetails from './StudentDetails'
 import { useHistory } from 'react-router-dom';
+
+import { StudentFormContext } from '../contexts/StudentFormContext';
+
 
 import AddStudent from './AddStudent'
 
@@ -54,11 +57,16 @@ padding-top: 3%;
 
 
 export default function TeacherDashboard() {
+  const { isActive } = useContext(StudentFormContext)
+
 
 
   let history = useHistory()
 
   const id = localStorage.getItem('id');
+  console.log("isactive in teacherDashboard: ", isActive)
+
+  
     return(
         <div className="Proffessor_dashboard">
             {/* <StyledBtnDiv>
@@ -67,13 +75,10 @@ export default function TeacherDashboard() {
             </StyledBtnDiv> */}
             <StyledBtnDiv>
 
-             
-            //  <StyledBtn onClick={() => history.push('/student-details') }>View Students</StyledBtn>
-              
-        //    <StyledBtn>Add Student</StyledBtn>
 
-         //   <button>View Students</button>
-            <AddStudent />
+              
+              <StyledBtn><AddStudent /></StyledBtn>
+            
 
             </StyledBtnDiv>
 
@@ -90,10 +95,16 @@ export default function TeacherDashboard() {
           </StudentListDiv>
           <TaskTableDiv>
            {/* <PrivateRoute  exact path = '/dashboard'> */}
-           <UpcomingDeadlines />
 
-//           </PrivateRoute>
-//           </TaskTableDiv>         
+           {!isActive ? (
+             <UpcomingDeadlines />
+           ) : (
+              <StudentCard/>
+           )
+          }
+           
+
+     
 
           {/* </PrivateRoute> */}
           </TaskTableDiv>

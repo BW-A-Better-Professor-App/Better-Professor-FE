@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { axiosWithAuth } from '../utils/axiosWithAuth'; 
+import { StudentFormContext } from '../contexts/StudentFormContext';
+
+import Moment from 'react-moment';
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -42,21 +46,23 @@ const useStyles = makeStyles({
   ];
   
 export default function UpcomingDeadlines() {
-        const [deadlines, setDeadlines] = useState([])
+  const { deadlines } = useContext(StudentFormContext)
 
-        useEffect(() => {
-            console.log("get tasks coming");
-            axiosWithAuth()
-            .get(`/tasks`)
-            .then(response => {
+ 
+
+        // useEffect(() => {
+        //     console.log("get tasks coming");
+        //     axiosWithAuth()
+        //     .get(`/tasks`)
+        //     .then(response => {
                 
-                console.log('this is the response from task get call', response)
-                setDeadlines(response.data);
-            })
-            .catch(err => {
-                console.log('unable to fetch task projects', err);
-            })
-        }, []);
+        //         console.log('this is the response from task get call', response)
+        //         setDeadlines(response.data);
+        //     })
+        //     .catch(err => {
+        //         console.log('unable to fetch task projects', err);
+        //     })
+        // }, []);
 
 
         if(!Array.isArray(deadlines)){
@@ -84,6 +90,7 @@ export default function UpcomingDeadlines() {
           <Table  size="small" aria-label="a dense table">
             <TableHead className="table_head">
               <TableRow>
+             
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Task</TableCell>
                 <TableCell align="center">Due Date</TableCell>
@@ -91,25 +98,17 @@ export default function UpcomingDeadlines() {
             </TableHead>
             <TableBody>
 
-//               {rows.map(row => (
-//                 <TableRow key={row.id}>
-//                   {/* <TableCell component="th" scope="row">
-//                     {row.name}
-//                   </TableCell> */}
-//                   <TableCell align="center">{row.Name}</TableCell>
-//                   <TableCell align="center">{row.Task}</TableCell>
-//                   <TableCell align="center">{row.DueDate}</TableCell>
-//                   <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
+
 
                {deadlines.map(deadline => (
                 <TableRow key={deadline.task_id}>
-                  <TableCell component="th" scope="row">
+                  {/* <TableCell component="th" scope="row">
                     {/* {row.name} */}
-                  </TableCell>
-                  <TableCell align="right">{deadline.firstname}</TableCell>
-                  <TableCell align="right">{deadline.task}</TableCell>
-                  <TableCell align="right">{deadline.duedate}</TableCell>
-                  <TableCell align="right"><StyledBtn>View</StyledBtn></TableCell>
+                  {/* </TableCell> */} 
+                  <TableCell align="center">{deadline.firstname} {deadline.lastname} </TableCell>
+                  <TableCell align="center">{deadline.task}</TableCell>
+                  <TableCell align="center"><Moment format="MM/DD/YYYY" >{deadline.due_date}</Moment></TableCell>
+                  <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
 
                 </TableRow>
               ))}

@@ -87,10 +87,11 @@ const initialValues = {
   professor_id: id,
 }
 
-const AddStudent = props => {
-  const { setAdding, adding, setIsActive } = useContext(StudentFormContext)
+const EditStudentForm = props => {
+  const { setEditing, studentList, activeStudent, setStudentList } = useContext(StudentFormContext)
   const classes = useStyles();
-  const [studentInfo, setStudentInfo] = useState(initialValues)
+  const [editStudent, setEditStudent] = useState(initialValues)
+  const student_id = activeStudent.id
   
   const [open, setOpen] = useState(false);
   
@@ -105,22 +106,35 @@ const AddStudent = props => {
   };
 
   const handleChange = event => {
-    setStudentInfo(event.target.value);
+    editStudent(event.target.value);
   };
 
+  useEffect(()=> {
+    console.log('studentlist through context to editstudent form', studentList )
+    // const studentToEdit= studentList.find(student => student.student_id === activeStudent.id);
+    console.log("Student to update", activeStudent);
+
+    if(activeStudent) {
+      setEditStudent(activeStudent);
+      console.log("Student to update", activeStudent);
+
+    }
+
+  }, [studentList, activeStudent])
+
+  
   const FormSubmit = (e) => {
     e.preventDefault()
-    console.log("These are values", studentInfo);
+    console.log("These are values", editStudent);
     // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .post(`/auth/register/${id}`, studentInfo)
-        .then(res => {
-          console.log("success", res);
-          console.log("this is response from add student", res)
-          setIsActive(false);
-          setAdding(!adding)
-          handleClose()
+      .put(`/students/${activeStudent.student_id}`, editStudent)
+      .then(res => {
+        console.log("response from put: ", res);
+        setStudentList(studentList);
+        setEditing(true);
+        handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));
 
@@ -131,7 +145,7 @@ const AddStudent = props => {
       <CssBaseline />
       <div>
         <button type="button" onClick={handleOpen}>
-          Add Student
+          Edit Student
         </button>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -148,7 +162,7 @@ const AddStudent = props => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
-                Add student
+                Edit student
               </Typography>
               <Formik
                 validationSchema={SignupSchema}
@@ -164,8 +178,8 @@ const AddStudent = props => {
                         name="firstname"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, firstname: e.target.value})}
-                        value={studentInfo.firstname}
+                        onChange={(e) => setEditStudent({...editStudent, firstname: e.target.value})}
+                        value={editStudent.firstname}
                         id="firstname"
                         label="student's first name"
                         autoFocus
@@ -183,8 +197,8 @@ const AddStudent = props => {
                         name="lastname"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, lastname: e.target.value})}
-                        value={studentInfo.lastname}
+                        onChange={(e) => setEditStudent({...editStudent, lastname: e.target.value})}
+                        value={editStudent.lastname}
                         id="lastname"
                         label="student's last name"
                         autoFocus
@@ -202,8 +216,8 @@ const AddStudent = props => {
                         name="email"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
-                        value={studentInfo.email}
+                        onChange={(e) => setEditStudent({...editStudent, email: e.target.value})}
+                        value={editStudent.email}
                         id="email"
                         label="student's email"
                         autoFocus
@@ -214,17 +228,17 @@ const AddStudent = props => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                   <TextField
                     error={errors.username && touched.username}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, username: e.target.value})}
-                    value={studentInfo.username}
+                    onChange={(e) => setEditStudent({...editStudent, username: e.target.value})}
+                    value={editStudent.username}
                     id="username"
                     label="username"
                     name="username"
-                    autoComplete="uname"
+                    autoComplete="username"
                     helperText={
                       errors.username && touched.username
                         ? errors.username
@@ -237,8 +251,8 @@ const AddStudent = props => {
                     error={errors.password && touched.password}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, password: e.target.value})}
-                    value={studentInfo.password}
+                    onChange={(e) => setEditStudent({...editStudent, password: e.target.value})}
+                    value={editStudent.password}
                     name="password"
                     label="Password"
                     type="password"
@@ -250,7 +264,7 @@ const AddStudent = props => {
                         : null
                     }
                   />
-                </Grid>
+                </Grid> */}
                   </Grid>
                   <Button
                     type="submit"
@@ -261,7 +275,7 @@ const AddStudent = props => {
                     onClick={FormSubmit}
                     onSubmit={handleClose}
                   >
-                    Add student
+                    Edit Student
                   </Button>
                 </Form>
               )}
@@ -274,4 +288,4 @@ const AddStudent = props => {
   );
 };
 
-export default AddStudent;
+export default EditStudentForm;
