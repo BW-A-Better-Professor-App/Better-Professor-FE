@@ -40,6 +40,7 @@ const App = props => {
 
   const [taskToEdit, setTaskToEdit] = useState({})
   const [taskEditing, setTaskEditing] = useState(false)
+  const [ addingTask, setAddingTask ] = useState(false);
 
   const [activeStudent, setActiveStudent] = useState({})
   const [ isActive, setIsActive ] = useState(false)
@@ -74,7 +75,7 @@ const App = props => {
           
           console.log('this is the response from task get call for all', response)
           setDeadlines(response.data);
-          
+
       })
       .catch(err => {
           console.log('unable to fetch task projects', err);
@@ -86,13 +87,14 @@ const App = props => {
         
           console.log('this is the response from task get call for a student', response)
           setDeadlines(response.data.tasks);
+          setAddingTask(false);
       })
       .catch(err => {
           console.log('unable to fetch task projects', err);
           // setDeadlines([])
       })
   } 
-}, [isActive, activeStudent]);
+}, [isActive, activeStudent, addingTask]);
 
 
 
@@ -233,7 +235,7 @@ const App = props => {
 
   return (
     <div className="App">
-      <StudentFormContext.Provider value = {{studentList, deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive, deadlines, setDeadlines }}>
+      <StudentFormContext.Provider value = {{setAddingTask, studentList, deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive, deadlines, setDeadlines }}>
         <Router>
           <Header />
           <Route  exact path = '/'>

@@ -79,7 +79,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const id = parseInt(localStorage.getItem('id'),10);
 const initialValues = {
-  firstname: "",
+  student: "",
   lastname: "",
   email: "",
   username: "",
@@ -87,14 +87,19 @@ const initialValues = {
   professor_id: id,
 }
 
-const AddStudent = props => {
-  const { setAdding } = useContext(StudentFormContext)
+const AddTask = props => {
+  const { setAddingTask, activeStudent } = useContext(StudentFormContext)
   const classes = useStyles();
-  const [studentInfo, setStudentInfo] = useState(initialValues)
+  const [newTask, setNewTask] = useState({
+    professor_id: id,
+    student_id: activeStudent.student_id,
+    task:"",
+    due_date: Date()
+
+  })
   
   const [open, setOpen] = useState(false);
   
-  const studentArrayLength = 0;
 
   const handleOpen = () => {
     setOpen(true);
@@ -105,20 +110,50 @@ const AddStudent = props => {
   };
 
   const handleChange = event => {
-    setStudentInfo(event.target.value);
+    setNewTask(event.target.value);
   };
 
+  const formatDate = (date) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+  // const dateFormatter = (newTask) = {
+
+  //   // console.log("this is task to format: ", newTask)
+
+
+
+
+
+   
+  //   return formmattedDate
+
+  // }
   const FormSubmit = (e) => {
     e.preventDefault()
-    console.log("These are values", studentInfo);
-    // setStudentInfo({...studentInfo, professor_id: {id} })
+
+    const formattedTask = {
+      ...newTask,
+      due_date: formatDate(newTask.due_date)
+    }
+    console.log("These are values to be submitted for task", formattedTask);
     axiosWithAuth()
     //register student to api with pot
-      .post(`/auth/register/${id}`, studentInfo)
+      .post(`/tasks`, newTask)
         .then(res => {
-          console.log("success", res);
-          console.log("this is response from add student", res)
-          setAdding(true)
+          console.log("success posting task", res);
+          console.log("this is response from adding task", res)
+          setAddingTask(true)
           handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));
@@ -130,7 +165,7 @@ const AddStudent = props => {
       <CssBaseline />
       <div>
         <button type="button" onClick={handleOpen}>
-          Add Student
+          Add Task
         </button>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -147,7 +182,7 @@ const AddStudent = props => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
-                Add student
+                Add Task
               </Typography>
               <Formik
                 validationSchema={SignupSchema}
@@ -159,97 +194,46 @@ const AddStudent = props => {
                     <Grid item xs={12}>
                       <TextField
                         error={errors.firstname && touched.firstname}
-                        autoComplete="firstname"
-                        name="firstname"
+                        autoComplete="task"
+                        name="task"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, firstname: e.target.value})}
-                        value={studentInfo.firstname}
-                        id="firstname"
-                        label="student's first name"
+                        onChange={(e) => setNewTask({...newTask, task: e.target.value})}
+                        value={newTask.task}
+                        id="task"
+                        label="task"
                         autoFocus
                         helperText={
-                          errors.firstname && touched.firstname
-                            ? errors.firstname
+                          errors.task && touched.task
+                            ? errors.task
                             : null
                         }
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        error={errors.lastname && touched.lastname}
-                        autoComplete="lastname"
-                        name="lastname"
+                        error={errors.date && touched.date}
+                        autoComplete="date"
+                        name="date"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, lastname: e.target.value})}
-                        value={studentInfo.lastname}
-                        id="lastname"
-                        label="student's last name"
+                        onChange={(e) => setNewTask({...newTask, due_date: e.target.value})}
+                        value={newTask.date}
+                        id="date"
+                        label="Select Date"
+                        className={classes.textField}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        defaultValue="2020-05-24"
                         autoFocus
                         helperText={
-                          errors.lastname && touched.lastname
-                            ? errors.lastname
+                          errors.date && touched.date
+                            ? errors.date
                             : null
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        error={errors.email && touched.email}
-                        autoComplete="email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
-                        value={studentInfo.email}
-                        id="email"
-                        label="student's email"
-                        autoFocus
-                        helperText={
-                          errors.email && touched.email
-                            ? errors.email
-                            : null
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                  <TextField
-                    error={errors.username && touched.username}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, username: e.target.value})}
-                    value={studentInfo.username}
-                    id="username"
-                    label="username"
-                    name="username"
-                    autoComplete="uname"
-                    helperText={
-                      errors.username && touched.username
-                        ? errors.username
-                        : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={errors.password && touched.password}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, password: e.target.value})}
-                    value={studentInfo.password}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    helperText={
-                      errors.password && touched.password
-                        ? errors.password
-                        : null
-                    }
-                  />
-                </Grid>
                   </Grid>
                   <Button
                     type="submit"
@@ -260,7 +244,7 @@ const AddStudent = props => {
                     onClick={FormSubmit}
                     onSubmit={handleClose}
                   >
-                    Add student
+                    Add Task
                   </Button>
                 </Form>
               )}
@@ -273,4 +257,4 @@ const AddStudent = props => {
   );
 };
 
-export default AddStudent;
+export default AddTask;

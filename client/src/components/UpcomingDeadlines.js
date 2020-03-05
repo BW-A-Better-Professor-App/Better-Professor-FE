@@ -107,7 +107,7 @@ export default function UpcomingDeadlines() {
                   {/* </TableCell> */} 
                   <TableCell align="center">{deadline.firstname} {deadline.lastname} </TableCell>
                   <TableCell align="center">{deadline.task}</TableCell>
-                  <TableCell align="center"><Moment format="DD/MM/YYYY">{deadline.due_date}</Moment></TableCell>
+                  <TableCell align="center"><Moment format="MM/DD/YYYY" >{deadline.due_date}</Moment></TableCell>
                   <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
 
                 </TableRow>

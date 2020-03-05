@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { StudentFormContext } from '../contexts/StudentFormContext';
 import Moment from 'react-moment';
+import AddTask from "./AddTask";
 
 // import EditStudentForm from './EditStudentForm'
 
@@ -16,6 +17,7 @@ const StudentCard = props => {
     <div>
       <h1>{activeStudent.firstname}</h1>
       <button onClick={ev => deleteStudent(ev)}>Delete Student</button>
+      <AddTask />
       {/* <EditStudentForm/> */}
       
       {deadlines.map(deadline => (
