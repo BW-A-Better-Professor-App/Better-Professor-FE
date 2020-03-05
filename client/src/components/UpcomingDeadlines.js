@@ -61,6 +61,15 @@ export default function UpcomingDeadlines() {
             })
         }, []);
 
+
+        if(!Array.isArray(deadlines)){
+            return(
+               <div>
+                   <h2>No array</h2>
+               </div>
+
+            )}else{
+
     // return(
     //     <div className='upcoming-deadlines'>
     //         {deadlines.map(deadline => (
@@ -84,19 +93,20 @@ export default function UpcomingDeadlines() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {deadlines.map(deadline => (
+               {deadlines.map(deadline => (
                 <TableRow key={deadline.task_id}>
-                  {/* <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell> */}
-                  {/* <TableCell align="right">{deadline.firstname}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {/* {row.name} */}
+                  </TableCell>
+                  <TableCell align="right">{deadline.firstname}</TableCell>
                   <TableCell align="right">{deadline.task}</TableCell>
                   <TableCell align="right">{deadline.duedate}</TableCell>
                   <TableCell align="right"><StyledBtn>View</StyledBtn></TableCell>
-                </TableRow> */}
-              {/* ))} */}
-            </TableBody> */}
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
       );
+               }
 }

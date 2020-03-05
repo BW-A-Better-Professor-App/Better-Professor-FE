@@ -34,6 +34,7 @@ export default function StudentList() {
         .then(response => {
             console.log('response of users on student list', response);
               setStudents(response.data.student);
+              setAdding(false)
         })
         .catch(err => {
             console.log('error, go fix!', err);
