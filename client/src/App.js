@@ -13,6 +13,7 @@ import TeacherDashboard from './components/TeacherDashboard';
 import StudentCard from './components/StudentCard';
 import StudentList from './components/StudentList';
 import { axiosWithAuth } from './utils/axiosWithAuth';
+import StudentDetails from './components/StudentDetails'
 
 const initialStudent = {
   username: '',
@@ -160,6 +161,9 @@ const App = props => {
           </PrivateRoute>
           <PrivateRoute path="/student-dashboard/:id">
             <StudentCard/>
+          </PrivateRoute>
+          <PrivateRoute path="/student-details">
+            <StudentDetails/>
           </PrivateRoute>
 
         </Router>

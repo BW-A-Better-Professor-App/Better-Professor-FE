@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-
-import StudentCard from './StudentCard'
-import { axiosWithAuth } from '../utils/axiosWithAuth';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,13 +9,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
+
+import StudentCard from './StudentCard'
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 // import data from './data.js'
 
 const data = [
-  { name: 'John Smith', task: 'Review Term Paper', Date: 'March 10th'},
-  { name: 'John burger', task: 'Review Term Paper', Date: 'March 11th'},
-  { name: 'John stonper', task: 'Review Term Paper', Date: 'March 13th'},
-  { name: 'John lamoni', task: 'Review Term Paper', Date: 'March 16th'},
+  { name: 'John Smith', email: 'john@gmail.com',  phone: '202-389-8765', task: 'Review Term Paper', Date: 'March 10th'},
+  { name: 'John Smith', email: 'john@gmail.com' , phone: '202-389-8765', task: 'Review Term Paper', Date: 'March 10th'},
+  { name: 'John Smith', email: 'john@gmail.com' , phone: '202-389-8765', task: 'Review Term Paper', Date: 'March 10th'},
+  { name: 'John Smith', email: 'john@gmail.com' , phone: '202-389-8765', task: 'Review Term Paper', Date: 'March 10th'},
 ]
 export default function StudentList() {
     const [students, setStudents] =  useState([])
@@ -39,49 +38,32 @@ export default function StudentList() {
     }, []);
 
     return (
-      <TableContainer className="table_container" component={Paper}>
+        <TableContainer className="table_container" component={Paper}>
         <Table  size="small" aria-label="a dense table">
           <TableHead className="table_head">
             <TableRow>
-              <TableCell align="center">My Students</TableCell>
-              
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Phone Number</TableCell>
+              <TableCell align="center">Task</TableCell>
+              <TableCell align="center">Due Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(student => (
-              <TableRow key={student.id}>
+            {data.map(row => (
+              <TableRow key={row.id}>
                 {/* <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell> */}
-                <TableCell align="center">{student.name}</TableCell>
-                
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.email}</TableCell>
+                <TableCell align="center">{row.phone}</TableCell>
+                <TableCell align="center">{row.task}</TableCell>
+                <TableCell align="center">{row.Date}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     );
-
-    // return (
-    //     <section className="student-list">
-    //         {/* <SearchFrom /> */}
-    //         <div>
-    //          {data.map(student => (
-    //           <div key={data.id}>
-              
-    //             <h1>{student.name}</h1> 
-                
-                
-    //             {/* // assignments={student.assignments}
-    //             // dueDate={student.assignments.dueDates}
-    //             // notes={student.notes} */}
-              
-    //           </div>
-    //         ))}
-    //         </div>
-    //     </section>
-    // );
 }
-
-//needs to display a list of students.
-//need to be able to click on each student's name and have their details display

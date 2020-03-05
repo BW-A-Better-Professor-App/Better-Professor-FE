@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.table_container{
+  border: 1px solid blue;
+  background: red;
+}
+
+.table_head{
+  background: grey;
+}
+
+.Proffessor_dashboard{
+  background-color: #E2F3F5;
+}
