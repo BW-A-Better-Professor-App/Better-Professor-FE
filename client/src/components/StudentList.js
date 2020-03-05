@@ -34,6 +34,8 @@ export default function StudentList() {
         .then(response => {
             console.log('response of users on student list', response);
               setStudents(response.data.student);
+              // window.localStorage.setItem('professor_id', response.data.student.professor_id)
+              // window.localStorage.setItem('student_id', response.data.student.student_id)
               setAdding(false)
         })
         .catch(err => {
