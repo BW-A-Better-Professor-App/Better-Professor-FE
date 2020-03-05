@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, useHistory} from 'react-router-dom';
 import { StudentFormContext } from './contexts/StudentFormContext'
 
 import Login from './components/Login';
+import StudentLogin from './components/StudentLogin';
 import Header from './components/Header'
 import Register from "./components/Registration"
 import './App.css';
@@ -152,6 +153,10 @@ const App = props => {
           </Route>
           <Route  exact path = '/Login'>
             <Login />
+          </Route>
+
+          <Route  exact path = '/Login/Student'>
+            <StudentLogin />
           </Route>
 
           <PrivateRoute  exact path = '/dashboard'>
