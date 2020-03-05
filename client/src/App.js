@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, useHistory} from 'react-router-dom';
 import { StudentFormContext } from './contexts/StudentFormContext'
 
 import Login from './components/Login';
+import StudentLogin from './components/StudentLogin';
 import Header from './components/Header'
 import Register from "./components/Registration"
 import './App.css';
@@ -12,6 +13,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import TeacherDashboard from './components/TeacherDashboard';
 import StudentCard from './components/StudentCard';
 import StudentList from './components/StudentList';
+import AddStudent from './components/AddStudent';
 import { axiosWithAuth } from './utils/axiosWithAuth';
 import StudentDetails from './components/StudentDetails'
 
@@ -33,14 +35,15 @@ const App = props => {
 
   const [editing, setEditing] = useState(false);
   const [studentToEdit, setStudentToEdit] = useState(initialStudent);
+  const [ adding, setAdding ] = useState(false);
   // const [edit, setEdit] = useState(false)
 
   //useEffect grabs student list and should update if new student is added or if student is edited
   useEffect(()=> {
     axiosWithAuth()
-    .get(`/users`)
+    .get(`/users/all-students/1`)
     .then(res => {
-      console.log("this is the response", res);
+      console.log("this is the response of gets", res);
       setStudentList(res.data)
 
     })
@@ -48,7 +51,7 @@ const App = props => {
       console.error("there was an error: ", err);
     })
 
-  }, [student, editing]);
+  }, []);
 
 
   //function that when called sets editing to true and sets StudentToEdit to student that is passed in 
@@ -143,7 +146,7 @@ const App = props => {
 
   return (
     <div className="App">
-      <StudentFormContext.Provider value = {{}}>
+      <StudentFormContext.Provider value = {{ adding, setAdding }}>
         <Router>
           <Header />
           <Route  exact path = '/'>
@@ -151,6 +154,10 @@ const App = props => {
           </Route>
           <Route  exact path = '/Login'>
             <Login />
+          </Route>
+
+          <Route  exact path = '/Login/Student'>
+            <StudentLogin />
           </Route>
 
           <PrivateRoute  exact path = '/dashboard'>
@@ -161,10 +168,18 @@ const App = props => {
           </PrivateRoute>
           <PrivateRoute path="/student-dashboard/:id">
             <StudentCard/>
+          <PrivateRoute path="/student-registration/">
+            <AddStudent />
           </PrivateRoute>
+
           <PrivateRoute path="/student-details">
             <StudentDetails/>
           </PrivateRoute>
+
+          <Route  exact path = '/'>
+            <Register/>
+          </Route>
+
 
         </Router>
       </StudentFormContext.Provider>

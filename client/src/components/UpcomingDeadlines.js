@@ -45,15 +45,27 @@ export default function UpcomingDeadlines() {
         const [deadlines, setDeadlines] = useState([])
 
         useEffect(() => {
+            console.log("get tasks coming");
             axiosWithAuth()
             .get(`/tasks`)
             .then(response => {
+                
+                console.log('this is the response from task get call', response)
                 setDeadlines(response.data);
             })
             .catch(err => {
-                console.log('unable to fetch deadlines', err);
+                console.log('unable to fetch task projects', err);
             })
         }, []);
+
+
+        if(!Array.isArray(deadlines)){
+            return(
+               <div>
+                   <h2>No array</h2>
+               </div>
+
+            )}else{
 
     // return(
     //     <div className='upcoming-deadlines'>
@@ -66,7 +78,7 @@ export default function UpcomingDeadlines() {
 
     //     </div>
     // )
-
+        // console.log("this is taskArray", taskArray)
     return (
         <TableContainer className="table_container" component={Paper}>
           <Table  size="small" aria-label="a dense table">
@@ -78,19 +90,32 @@ export default function UpcomingDeadlines() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => (
-                <TableRow key={row.id}>
-                  {/* <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell> */}
-                  <TableCell align="center">{row.Name}</TableCell>
-                  <TableCell align="center">{row.Task}</TableCell>
-                  <TableCell align="center">{row.DueDate}</TableCell>
-                  <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
+
+//               {rows.map(row => (
+//                 <TableRow key={row.id}>
+//                   {/* <TableCell component="th" scope="row">
+//                     {row.name}
+//                   </TableCell> */}
+//                   <TableCell align="center">{row.Name}</TableCell>
+//                   <TableCell align="center">{row.Task}</TableCell>
+//                   <TableCell align="center">{row.DueDate}</TableCell>
+//                   <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
+
+               {deadlines.map(deadline => (
+                <TableRow key={deadline.task_id}>
+                  <TableCell component="th" scope="row">
+                    {/* {row.name} */}
+                  </TableCell>
+                  <TableCell align="right">{deadline.firstname}</TableCell>
+                  <TableCell align="right">{deadline.task}</TableCell>
+                  <TableCell align="right">{deadline.duedate}</TableCell>
+                  <TableCell align="right"><StyledBtn>View</StyledBtn></TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       );
+               }
 }

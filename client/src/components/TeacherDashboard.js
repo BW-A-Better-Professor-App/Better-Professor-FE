@@ -4,9 +4,13 @@ import UpcomingDeadlines from './UpcomingDeadlines';
 import PrivateRoute from '../utils/PrivateRoute';
 import styled from 'styled-components';
 import StudentCard from './StudentCard'
+
 import { Link } from 'react-router-dom'
 import StudentDetails from './StudentDetails'
 import { useHistory } from 'react-router-dom';
+
+import AddStudent from './AddStudent'
+
 
 
 const StyledDiv = styled.div`
@@ -51,18 +55,26 @@ padding-top: 3%;
 
 export default function TeacherDashboard() {
 
+
   let history = useHistory()
+
+  const id = localStorage.getItem('id');
     return(
         <div className="Proffessor_dashboard">
             {/* <StyledBtnDiv>
             <StyledBtn>Add Student</StyledBtn>
-           <StyledBtn>View Student</StyledBtn>
+            <StyledBtn>View Student</StyledBtn>
             </StyledBtnDiv> */}
             <StyledBtnDiv>
+
              
-              <StyledBtn onClick={() => history.push('/student-details') }>View Students</StyledBtn>
+            //  <StyledBtn onClick={() => history.push('/student-details') }>View Students</StyledBtn>
               
-            <StyledBtn>Add Student</StyledBtn>
+        //    <StyledBtn>Add Student</StyledBtn>
+
+         //   <button>View Students</button>
+            <AddStudent />
+
             </StyledBtnDiv>
 
             <PrivateRoute path="/student-details">
@@ -72,15 +84,20 @@ export default function TeacherDashboard() {
            
            <StyledDiv> 
            <StudentListDiv>
-           <PrivateRoute  exact path = '/dashboard'>
+           {/* <PrivateRoute  exact path = '/dashboard'> */}
           <StudentList />
-          </PrivateRoute>
+          {/* </PrivateRoute> */}
           </StudentListDiv>
           <TaskTableDiv>
-           <PrivateRoute  exact path = '/dashboard'>
+           {/* <PrivateRoute  exact path = '/dashboard'> */}
            <UpcomingDeadlines />
-          </PrivateRoute>
-          </TaskTableDiv>         
+
+//           </PrivateRoute>
+//           </TaskTableDiv>         
+
+          {/* </PrivateRoute> */}
+          </TaskTableDiv>
+
           </StyledDiv>    
          
          

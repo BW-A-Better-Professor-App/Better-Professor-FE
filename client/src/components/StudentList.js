@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios'
+import { StudentFormContext } from '../contexts/StudentFormContext';
+
 
 import StudentCard from './StudentCard'
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,6 +16,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
+
+import { useHistory } from 'react-router-dom';
+
 // import data from './data.js'
 
 const data = [
@@ -22,23 +28,36 @@ const data = [
   { name: 'John lamoni', task: 'Review Term Paper', Date: 'March 16th'},
 ]
 export default function StudentList() {
+    const id = localStorage.getItem('id');
+    const { adding, setAdding } = useContext(StudentFormContext)
+
     const [students, setStudents] =  useState([])
+    const history = useHistory();
+    const routeToStudent = (ev, student) => {
+      ev.preventDefault();
+      history.push(`/dashboard/${student.id}`);
+    }
+
 
     useEffect(() => {
       // setStudents(data);
       // console.log("dummy students: ", students)
         axiosWithAuth()
-        .get(`/users`)
+        .get(`/users/all-students/${id}`)
         .then(response => {
-            console.log('response of tasks', response);
-              setStudents(response.data);
+            console.log('response of users on student list', response);
+              setStudents(response.data.student);
+              // window.localStorage.setItem('professor_id', response.data.student.professor_id)
+              // window.localStorage.setItem('student_id', response.data.student.student_id)
+              setAdding(false)
         })
         .catch(err => {
             console.log('error, go fix!', err);
         })
-    }, []);
+    }, [adding]);
 
     return (
+
       <TableContainer className="table_container" component={Paper}>
         <Table  size="small" aria-label="a dense table">
           <TableHead className="table_head">
@@ -54,6 +73,17 @@ export default function StudentList() {
                   {row.name}
                 </TableCell> */}
                 <TableCell align="center">{student.name}</TableCell>
+
+//         <section className="student-list">
+//             {/* <SearchFrom /> */}
+//             <div>
+//             {students.map(student => (
+//               <div onClick={ev => routeToStudent(ev, student)} key={student.id}>
+              
+//                 <h1>{student.firstname} {student.lastname}</h1> 
+                
+                
+
                 
               </TableRow>
             ))}
