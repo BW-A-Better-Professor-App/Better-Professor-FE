@@ -26,15 +26,8 @@ import { Formik, Form } from "formik";
 import * as  yup from "yup";
 
 let SignupSchema = yup.object().shape({
-  firstname: yup.string().required("This field is required."),
-  lastname: yup.string().required("This field is required."),
-  email: yup.string().email('Invalid email address').required('Required'),
-  username: yup.string().required("This field is required."),
-  password: yup
-    .string()
-    .min(6, "Password is too short.")
-    .max(20, "Password is too long.")
-    .required("This field is required.")
+  task: yup.string().required("This field is required."),
+  due_date: yup.string().required("This field is required.")
 });
 
 const useStyles = makeStyles(theme => ({
@@ -87,10 +80,9 @@ const initialValues = {
   professor_id: id,
 }
 
-const EditStudentForm = props => {
-  const { setEditing, studentList, activeStudent, setStudentList } = useContext(StudentFormContext)
+const EditTaskForm = props => {
+  const { setEditing, taskToEdit, setTaskToEdit } = useContext(StudentFormContext)
   const classes = useStyles();
-  const [editStudent, setEditStudent] = useState(initialValues)
   const student_id = activeStudent.id
   
   const [open, setOpen] = useState(false);
@@ -110,7 +102,7 @@ const EditStudentForm = props => {
   };
 
   useEffect(()=> {
-    console.log('studentlist through context to editstudent form', studentList )
+   
     // const studentToEdit= studentList.find(student => student.student_id === activeStudent.id);
     console.log("Student to update", activeStudent);
 

@@ -88,7 +88,7 @@ const initialValues = {
 }
 
 const AddStudent = props => {
-  const { setAdding } = useContext(StudentFormContext)
+  const { setAdding, adding, setIsActive } = useContext(StudentFormContext)
   const classes = useStyles();
   const [studentInfo, setStudentInfo] = useState(initialValues)
   
@@ -118,7 +118,8 @@ const AddStudent = props => {
         .then(res => {
           console.log("success", res);
           console.log("this is response from add student", res)
-          setAdding(true)
+          setIsActive(false);
+          setAdding(!adding)
           handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));

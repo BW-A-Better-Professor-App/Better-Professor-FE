@@ -50,13 +50,30 @@ const App = props => {
 
   // const [edit, setEdit] = useState(false)
 
+  useEffect(() => {
+    // setStudents(data);
+    // console.log("dummy students: ", students)
+      axiosWithAuth()
+      .get(`/users/all-students/${id}`)
+      .then(response => {
+          console.log('response of users on student list', response);
+            setStudentList(response.data.student);
+            // window.localStorage.setItem('professor_id', response.data.student.professor_id)
+            // window.localStorage.setItem('student_id', response.data.student.student_id)
+            setAdding(false)
+      })
+      .catch(err => {
+          console.log('error, go fix!', err);
+      })
+  }, [adding]);
+
   //useEffect grabs student list and should update if new student is added or if student is edited
   useEffect(()=> {
     axiosWithAuth()
     .get(`/users/all-students/${id}`)
     .then(res => {
       console.log("this is the response of gets", res);
-      setStudentList(res.data)
+      setStudentList(res.data.student)
 
     })
     .catch(err => {
@@ -75,6 +92,7 @@ const App = props => {
           
           console.log('this is the response from task get call for all', response)
           setDeadlines(response.data);
+          setIsActive(false)
 
       })
       .catch(err => {
@@ -88,6 +106,7 @@ const App = props => {
           console.log('this is the response from task get call for a student', response)
           setDeadlines(response.data.tasks);
           setAddingTask(false);
+          setIsActive(true)
       })
       .catch(err => {
           console.log('unable to fetch task projects', err);
@@ -113,7 +132,7 @@ const App = props => {
       .then(res => {
         console.log("response from put: ", res);
         setStudentList(studentList);
-        setEditing(false);
+        setEditing(!editing);
         // setEdit(true);
       })
       .catch(err => {
@@ -190,9 +209,10 @@ const App = props => {
     console.log("student trying to delete: ", activeStudent)
 
     axiosWithAuth()
-        .delete(`/students/${activeStudent.student_id}`)
+        .delete(`/users/student/${activeStudent.student_id}`)
         .then(res => {
           alert("Deleted Student")
+          console.log("this is the response of delete: ", res)
           // props.history.push("/dashboard")
           setIsActive(false)
           setAdding(true)
@@ -235,7 +255,7 @@ const App = props => {
 
   return (
     <div className="App">
-      <StudentFormContext.Provider value = {{setAddingTask, studentList, deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive, deadlines, setDeadlines }}>
+      <StudentFormContext.Provider value = {{setAddingTask, taskToEdit, setTaskToEdit, studentList, setStudentList, deleteStudent,  adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive,setIsActive, deadlines, setDeadlines }}>
         <Router>
           <Header />
           <Route  exact path = '/'>

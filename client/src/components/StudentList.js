@@ -29,29 +29,15 @@ const data = [
 ]
 export default function StudentList() {
   const id = parseInt(localStorage.getItem('id'),10);
-    const { deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent } = useContext(StudentFormContext)
+    const { deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, studentList, setStudentList } = useContext(StudentFormContext)
 
-    const [students, setStudents] =  useState([])
+    // const [students, setStudents] =  useState([])
     const history = useHistory();
+    console.log("this is the student list from context to studentlist.js", studentList)
 
 
 
-    useEffect(() => {
-      // setStudents(data);
-      // console.log("dummy students: ", students)
-        axiosWithAuth()
-        .get(`/users/all-students/${id}`)
-        .then(response => {
-            console.log('response of users on student list', response);
-              setStudents(response.data.student);
-              // window.localStorage.setItem('professor_id', response.data.student.professor_id)
-              // window.localStorage.setItem('student_id', response.data.student.student_id)
-              setAdding(false)
-        })
-        .catch(err => {
-            console.log('error, go fix!', err);
-        })
-    }, [adding]);
+
 
     return (
 
@@ -77,8 +63,8 @@ export default function StudentList() {
                 <TableRow onClick={ev => resetActiveStudent(ev)}>
                   <TableCell align="center">All Students</TableCell>
                 </TableRow>
-                {students.map(student => (
-                  <TableRow onClick={ev => makeStudentActive(ev, student)} key={student.id}>
+                {studentList.map(student => (
+                  <TableRow onClick={ev => makeStudentActive(ev, student)} key={student.student_id}>
                   
                     <TableCell>{student.firstname} {student.lastname} </TableCell> 
                     </TableRow>
