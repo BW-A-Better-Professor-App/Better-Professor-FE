@@ -29,6 +29,7 @@ const initialStudent = {
 
 const App = props => {
   // let history = useHistory();
+  const id = parseInt(localStorage.getItem('id'),10);
   const [student, setStudent ] = useState(initialStudent)
 
   const [ studentList, setStudentList ] = useState([]);
@@ -36,12 +37,22 @@ const App = props => {
   const [editing, setEditing] = useState(false);
   const [studentToEdit, setStudentToEdit] = useState(initialStudent);
   const [ adding, setAdding ] = useState(false);
+
+  const [taskToEdit, setTaskToEdit] = useState({})
+  const [taskEditing, setTaskEditing] = useState(false)
+
+  const [activeStudent, setActiveStudent] = useState({})
+  const [ isActive, setIsActive ] = useState(false)
+
+  const [deadlines, setDeadlines] = useState([])
+
+
   // const [edit, setEdit] = useState(false)
 
   //useEffect grabs student list and should update if new student is added or if student is edited
   useEffect(()=> {
     axiosWithAuth()
-    .get(`/users/all-students/1`)
+    .get(`/users/all-students/${id}`)
     .then(res => {
       console.log("this is the response of gets", res);
       setStudentList(res.data)
@@ -52,6 +63,37 @@ const App = props => {
     })
 
   }, []);
+  //Grab single student projects or tasks
+  useEffect(() => {
+    console.log("get tasks coming");
+    if(!isActive){
+   
+      axiosWithAuth()
+      .get(`/tasks`)
+      .then(response => {
+          
+          console.log('this is the response from task get call for all', response)
+          setDeadlines(response.data);
+          
+      })
+      .catch(err => {
+          console.log('unable to fetch task projects', err);
+      })
+    }else{
+      axiosWithAuth()
+      .get(`/students/${activeStudent.student_id}/tasks`)
+      .then(response => {
+        
+          console.log('this is the response from task get call for a student', response)
+          setDeadlines(response.data.tasks);
+      })
+      .catch(err => {
+          console.log('unable to fetch task projects', err);
+          // setDeadlines([])
+      })
+  } 
+}, [isActive, activeStudent]);
+
 
 
   //function that when called sets editing to true and sets StudentToEdit to student that is passed in 
@@ -65,7 +107,7 @@ const App = props => {
     e.preventDefault();
 
     axiosWithAuth()
-      .put(`/${studentToEdit.id}`, studentToEdit)
+      .put(`/students/${studentToEdit.student_id}`, studentToEdit)
       .then(res => {
         console.log("response from put: ", res);
         setStudentList(studentList);
@@ -78,8 +120,49 @@ const App = props => {
   };
 
   
+  const makeStudentActive = (ev, student) => {
+    ev.preventDefault();
+    setActiveStudent(student);
+    setIsActive(true);
 
+    console.log("active student", activeStudent)
+    console.log("isactive: ", isActive)
+    
+  }
 
+    
+  const resetActiveStudent = ev => {
+    ev.preventDefault();
+    setActiveStudent({});
+    setIsActive(false);
+
+    console.log("active student", activeStudent)
+    console.log("isactive: ", isActive)
+    
+  }
+
+  const editTask = task => {
+    setTaskEditing(true);
+    setTaskToEdit(task);
+  };
+
+  //save the edit by doing a put call
+  const saveTaskEdit = e => {
+    e.preventDefault();
+
+    axiosWithAuth()
+      .put(`/tasks/${taskToEdit.task_id}`, taskToEdit)
+      .then(res => {
+        console.log("response from put: ", res);
+        setDeadlines(deadlines);
+        setTaskEditing(false);
+        // setEdit(true);
+      })
+      .catch(err => {
+        console.log("error: ", err);
+        
+      });
+  };
 
 
   const handleChanges = e => {
@@ -100,13 +183,17 @@ const App = props => {
 
   };
 
-  const deleteStudent = student => {
+  const deleteStudent = ev => {
+    ev.preventDefault()
+    console.log("student trying to delete: ", activeStudent)
 
     axiosWithAuth()
-        .delete(`/${student.id}`)
+        .delete(`/students/${activeStudent.student_id}`)
         .then(res => {
           alert("Deleted Student")
-          props.history.push("/dashboard")
+          // props.history.push("/dashboard")
+          setIsActive(false)
+          setAdding(true)
         })
         .catch(err => alert("Error couldn't delete: ", err))
 
@@ -146,7 +233,7 @@ const App = props => {
 
   return (
     <div className="App">
-      <StudentFormContext.Provider value = {{ adding, setAdding }}>
+      <StudentFormContext.Provider value = {{studentList, deleteStudent, adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive, deadlines, setDeadlines }}>
         <Router>
           <Header />
           <Route  exact path = '/'>
@@ -168,6 +255,9 @@ const App = props => {
           </PrivateRoute>
           <PrivateRoute path="/student-dashboard/:id">
             <StudentCard/>
+          </PrivateRoute>
+
+
           <PrivateRoute path="/student-registration/">
             <AddStudent />
           </PrivateRoute>
@@ -183,7 +273,7 @@ const App = props => {
 
         </Router>
       </StudentFormContext.Provider>
-     
+    
     </div>
   );
 }
