@@ -48,11 +48,11 @@ export default function UpcomingDeadlines() {
         const [deadlines, setDeadlines] = useState([])
 
         useEffect(() => {
+            console.log("get tasks coming");
             axiosWithAuth()
             .get(`/tasks`)
             .then(response => {
-                const taskArray = response.data.filter(data => data.task === "null");
-                console.log('This is the task array', taskArray)
+                
                 console.log('this is the response from task get call', response)
                 setDeadlines(response.data);
             })
@@ -84,18 +84,18 @@ export default function UpcomingDeadlines() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {deadlines.map(deadline => (
+              {/* {deadlines.map(deadline => (
                 <TableRow key={deadline.task_id}>
                   {/* <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell> */}
-                  <TableCell align="right">{deadline.firstname}</TableCell>
+                  {/* <TableCell align="right">{deadline.firstname}</TableCell>
                   <TableCell align="right">{deadline.task}</TableCell>
                   <TableCell align="right">{deadline.duedate}</TableCell>
                   <TableCell align="right"><StyledBtn>View</StyledBtn></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+                </TableRow> */}
+              {/* ))} */}
+            </TableBody> */}
           </Table>
         </TableContainer>
       );
