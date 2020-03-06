@@ -94,7 +94,7 @@ export default function TeacherDashboard() {
           <TaskTableDiv>
            {/* <PrivateRoute  exact path = '/dashboard'> */}
 
-           {!isActive || isError ? (
+           {!isActive ? ( // || isError removed so it can go to student
              <UpcomingDeadlines />
            ) : (
               <StudentCard/>

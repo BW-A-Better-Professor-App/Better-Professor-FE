@@ -82,9 +82,7 @@ const initialValues = {
   firstname: "",
   lastname: "",
   email: "",
-  // username: "",
-  // password: "",
-  // professor_id: id,
+
 }
 
 const EditStudentForm = props => {
