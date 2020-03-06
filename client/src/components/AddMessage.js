@@ -11,12 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -26,15 +20,8 @@ import { Formik, Form } from "formik";
 import * as  yup from "yup";
 
 let SignupSchema = yup.object().shape({
-  firstname: yup.string().required("This field is required."),
-  lastname: yup.string().required("This field is required."),
-  email: yup.string().email('Invalid email address').required('Required'),
-  username: yup.string().required("This field is required."),
-  password: yup
-    .string()
-    .min(6, "Password is too short.")
-    .max(20, "Password is too long.")
-    .required("This field is required.")
+  message: yup.string().required("This field is required."),
+
 });
 
 const useStyles = makeStyles(theme => ({
@@ -78,15 +65,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const initialValues = {
-//   message:"",
-//   task_id:"",
-//   professor_id: id,
-//   student_id: activeStudent.student_id
-// }
 
 const AddMessage = ({task}) => {
-  const { setAdding, adding, setIsActive, activeStudent, setTaskEditing } = useContext(StudentFormContext)
+  const { activeStudent, setTaskEditing } = useContext(StudentFormContext)
   const id = parseInt(localStorage.getItem('id'),10);
   const classes = useStyles();
   const [message, setMessage] = useState({
@@ -97,8 +78,7 @@ const AddMessage = ({task}) => {
   })
   
   const [open, setOpen] = useState(false);
-  
-  const studentArrayLength = 0;
+ 
 
   const handleOpen = () => {
     setOpen(true);
@@ -115,7 +95,7 @@ const AddMessage = ({task}) => {
   const FormSubmit = (e) => {
     e.preventDefault()
     console.log("These are what we are trying to post to message", message);
-    // setMessage({...message, professor_id: {id} })
+    
     axiosWithAuth()
     //register student to api with pot
       .post(`/messages`, message)
@@ -134,7 +114,7 @@ const AddMessage = ({task}) => {
       <CssBaseline />
       <div>
         <button type="button" onClick={handleOpen}>
-          Add Message To Student
+          Add Message To Task
         </button>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -151,13 +131,13 @@ const AddMessage = ({task}) => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
-                Add Message To Student
+                Add Message To Task
               </Typography>
               <Formik
                 validationSchema={SignupSchema}
                 onSubmit={(e)=> FormSubmit()}
               >
-              {({ errors, handleChange, touched, status }) => (
+              {({ errors, touched }) => (
                 <Form className={classes.form}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -168,13 +148,13 @@ const AddMessage = ({task}) => {
                         variant="outlined"
                         fullWidth
                         onChange={(e) => setMessage({...message, message: e.target.value})}
-                        value={message.firstname}
+                        value={message.message}
                         id="message"
                         label="message"
                         autoFocus
                         helperText={
-                          errors.firstname && touched.firstname
-                            ? errors.firstname
+                          errors.message && touched.message
+                            ? errors.message
                             : null
                         }
                       />
@@ -190,7 +170,7 @@ const AddMessage = ({task}) => {
                     onClick={FormSubmit}
                     onSubmit={handleClose}
                   >
-                    Add student
+                    Add Message
                   </Button>
                 </Form>
               )}

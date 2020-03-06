@@ -11,12 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -93,8 +87,6 @@ const AddStudent = props => {
   const [studentInfo, setStudentInfo] = useState(initialValues)
   
   const [open, setOpen] = useState(false);
-  
-  const studentArrayLength = 0;
 
   const handleOpen = () => {
     setOpen(true);
@@ -111,9 +103,8 @@ const AddStudent = props => {
   const FormSubmit = (e) => {
     e.preventDefault()
     console.log("These are values", studentInfo);
-    // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
-    //register student to api with pot
+    //register student to api with post
       .post(`/students`, studentInfo)
         .then(res => {
           console.log("success", res);
@@ -154,7 +145,7 @@ const AddStudent = props => {
                 validationSchema={SignupSchema}
                 onSubmit={(e)=> FormSubmit()}
               >
-              {({ errors, handleChange, touched, status }) => (
+              {({ errors,  touched }) => (
                 <Form className={classes.form}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -261,7 +252,7 @@ const AddStudent = props => {
                     onClick={FormSubmit}
                     onSubmit={handleClose}
                   >
-                    Add student
+                    Add Student
                   </Button>
                 </Form>
               )}

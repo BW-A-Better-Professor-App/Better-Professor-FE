@@ -3,11 +3,10 @@ import axios from 'axios'
 import { StudentFormContext } from '../contexts/StudentFormContext';
 
 
-import StudentCard from './StudentCard'
+
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,71 +17,61 @@ import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 
 import { useHistory } from 'react-router-dom';
-import cuid from 'cuid';
 
-// import data from './data.js'
+
+
 
 
 const MessageList = ({task}) => {
   const id = parseInt(localStorage.getItem('id'),10);
-    const { messages, activeStudent, setTaskEditing } = useContext(StudentFormContext)
-
-    // const [students, setStudents] =  useState([])
-    const history = useHistory();
-    console.log("this is the message list from context to messagelist.js", messages)
+  const { messages, activeStudent, setTaskEditing } = useContext(StudentFormContext)
 
 
-    const filteredMessage = messages.filter(message => message.task_id === task.task_id);
-    console.log("this is the filtered messages by task", filteredMessage)
+  const history = useHistory();
+  console.log("this is the message list from context to messagelist.js", messages)
 
-    const deleteMessage = (ev, message) => {
-      ev.preventDefault()
-      const token = window.localStorage.getItem('token')
-      console.log("task trying to delete: ", message)
-  
-      axiosWithAuth()
-      .delete(`/messages/${message.id}`)
-      .then(res => {
-        alert("Deleted Message")
-        console.log("this is the response of delete task: ", res)
-        setTaskEditing(true);
-      })
-      .catch(err => alert("Error couldn't delete: ", err))
-  
-    }
 
-    return (
+  const filteredMessage = messages.filter(message => message.task_id === task.task_id);
+  console.log("this is the filtered messages by task", filteredMessage)
 
-      <TableContainer className="table_container" component={Paper}>
-        <Table  size="small" aria-label="a dense table">
-          <TableHead className="table_head">
-            <TableRow>
-              <TableCell align="center">My Project Messages</TableCell>
-              
-            </TableRow>
-          </TableHead>
-          <TableBody>
+  const deleteMessage = (ev, message) => {
+    ev.preventDefault()
+    const token = window.localStorage.getItem('token')
+    console.log("task trying to delete: ", message)
 
-                {filteredMessage.map(message => (
-                  <TableRow key={message.id}>
+    axiosWithAuth()
+    .delete(`/messages/${message.id}`)
+    .then(res => {
+      alert("Deleted Message")
+      console.log("this is the response of delete task: ", res)
+      setTaskEditing(true);
+    })
+    .catch(err => alert("Error couldn't delete: ", err))
 
-                    
-                  
-                    <TableCell>{message.message}</TableCell>
-                    <button onClick={ev => deleteMessage(ev, message)}>Delete Message</button> 
-                    </TableRow>
-                  
-                
-                
+  }
 
-                
-              
-            ))}
-           
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
+  return (
+
+    <TableContainer className="table_container" component={Paper}>
+      <Table  size="small" aria-label="a dense table">
+        <TableHead className="table_head">
+          <TableRow>
+            <TableCell align="center">My Project Messages</TableCell>
+            
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredMessage.map(message => (
+            <TableRow key={message.id}>
+              <TableCell>{message.message}</TableCell>
+              <button onClick={ev => deleteMessage(ev, message)}>Delete Message</button> 
+              </TableRow>
+          ))}
+          
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 
 }
 export default MessageList;

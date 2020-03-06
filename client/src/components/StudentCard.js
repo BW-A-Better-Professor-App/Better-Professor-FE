@@ -12,7 +12,6 @@ const StudentCard = props => {
 
   const { activeStudent, deadlines, deleteStudent, setTaskEditing, messages } = useContext(StudentFormContext)
 
-  
   console.log('this is first name: ', activeStudent.firstname)
 
   const deleteTask = (ev, task) => {
@@ -32,7 +31,7 @@ const StudentCard = props => {
   }
   return (
     <div>
-      <h1>{activeStudent.firstname}</h1>
+      <h1>{activeStudent.firstname} {activeStudent.lastname}</h1>
       <EditStudentForm />
       <button onClick={ev => deleteStudent(ev)}>Delete Student</button>
       <AddTask />
@@ -42,11 +41,9 @@ const StudentCard = props => {
         <div key={deadline.task_id }>
           <p align="center">{deadline.firstname} {deadline.lastname} </p>
           <p align="center">{deadline.task}</p>
-          <p align="center"><Moment format="MM/DD/YYYY">{deadline.due_date}</Moment></p>
+          <p align="center"><Moment add={{ days: 1}} format="MM/DD/YYYY">{deadline.due_date}</Moment></p>
           <EditTaskForm task = {deadline} />
           <AddMessage task = {deadline} />
-        
-          
           <button onClick={ev => deleteTask(ev, deadline)}>Delete Project</button>
           <MessageList task = {deadline}/>
         </div>

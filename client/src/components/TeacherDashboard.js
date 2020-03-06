@@ -4,8 +4,6 @@ import UpcomingDeadlines from './UpcomingDeadlines';
 import PrivateRoute from '../utils/PrivateRoute';
 import styled from 'styled-components';
 import StudentCard from './StudentCard'
-
-import { Link } from 'react-router-dom'
 import StudentDetails from './StudentDetails'
 import { useHistory } from 'react-router-dom';
 
@@ -69,48 +67,27 @@ export default function TeacherDashboard() {
 
   
     return(
-        <div className="Proffessor_dashboard">
+      <div className="Proffessor_dashboard">
 
-            <StyledBtnDiv>
-
-
-              
-              <AddStudent />
-            
-
-            </StyledBtnDiv>
-
-            <PrivateRoute path="/student-details">
-            <StudentDetails/>
-          </PrivateRoute>
-           
-           
-           <StyledDiv> 
-           <StudentListDiv>
-           {/* <PrivateRoute  exact path = '/dashboard'> */}
-          <StudentList />
-          {/* </PrivateRoute> */}
+        <StyledBtnDiv>
+          <AddStudent />
+        </StyledBtnDiv>
+        <PrivateRoute path="/student-details">
+          <StudentDetails/>
+        </PrivateRoute>
+        <StyledDiv> 
+          <StudentListDiv>
+            <StudentList />
           </StudentListDiv>
           <TaskTableDiv>
-           {/* <PrivateRoute  exact path = '/dashboard'> */}
-
-           {!isActive ? ( // || isError removed so it can go to student
-             <UpcomingDeadlines />
-           ) : (
+            {!isActive ? ( // || isError removed so it can go to student
+              <UpcomingDeadlines />
+            ) : (
               <StudentCard/>
-           )
-          }
-           
-
-     
-
-          {/* </PrivateRoute> */}
+            )
+            }
           </TaskTableDiv>
-
-          </StyledDiv>    
-         
-         
-          
-        </div>
+        </StyledDiv>      
+      </div>
     )
 }
