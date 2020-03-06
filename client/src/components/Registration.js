@@ -141,7 +141,7 @@ function Register(props) {
                 /> */}
                 <button type="submit">Register</button>
                 <div className="extra-options">
-                    <Link to= './Login' className="FormField_Link">Already have an account? Login</Link>
+                    <Link to= '/Login' className="FormField_Link">Already have an account? Login</Link>
                 </div>
                 {errorText && <p>{errorText}</p>}
             </form>

@@ -82,16 +82,16 @@ const initialValues = {
   firstname: "",
   lastname: "",
   email: "",
-  username: "",
-  password: "",
-  professor_id: id,
+  // username: "",
+  // password: "",
+  // professor_id: id,
 }
 
 const EditStudentForm = props => {
   const { setEditing, studentList, activeStudent, setStudentList } = useContext(StudentFormContext)
   const classes = useStyles();
   const [editStudent, setEditStudent] = useState(initialValues)
-  const student_id = activeStudent.id
+  const student_id = activeStudent.student_id
   
   const [open, setOpen] = useState(false);
   
@@ -106,6 +106,7 @@ const EditStudentForm = props => {
   };
 
   const handleChange = event => {
+    console.log("student editing", editStudent)
     editStudent(event.target.value);
   };
 
@@ -115,7 +116,11 @@ const EditStudentForm = props => {
     console.log("Student to update", activeStudent);
 
     if(activeStudent) {
-      setEditStudent(activeStudent);
+      setEditStudent({
+        firstname: activeStudent.firstname,
+        lastname: activeStudent.lastname,
+        email: activeStudent.email
+      });
       console.log("Student to update", activeStudent);
 
     }
@@ -129,7 +134,7 @@ const EditStudentForm = props => {
     // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .put(`/students/${activeStudent.student_id}`, editStudent)
+      .put(`/users/students/${student_id}`, editStudent)
       .then(res => {
         console.log("response from put: ", res);
         setStudentList(studentList);

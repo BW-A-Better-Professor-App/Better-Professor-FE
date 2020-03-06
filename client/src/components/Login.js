@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const Login = () => {
@@ -58,6 +58,9 @@ const Login = () => {
           className=''
         />
         <button className=''>Login</button>
+        <div className="extra-options">
+          <Link to= '/Login/Student' className="FormField_Link">Not a Teacher? Login As Student Here</Link>
+        </div>
       </form>
 		</div>
   );

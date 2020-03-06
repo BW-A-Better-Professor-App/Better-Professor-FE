@@ -57,7 +57,7 @@ padding-top: 3%;
 
 
 export default function TeacherDashboard() {
-  const { isActive } = useContext(StudentFormContext)
+  const { isActive, isError } = useContext(StudentFormContext)
 
 
 
@@ -65,6 +65,7 @@ export default function TeacherDashboard() {
 
   const id = localStorage.getItem('id');
   console.log("isactive in teacherDashboard: ", isActive)
+  console.log("iserror in teacherDashboard: ", isError)
 
   
     return(
@@ -96,7 +97,7 @@ export default function TeacherDashboard() {
           <TaskTableDiv>
            {/* <PrivateRoute  exact path = '/dashboard'> */}
 
-           {!isActive ? (
+           {!isActive || isError ? (
              <UpcomingDeadlines />
            ) : (
               <StudentCard/>

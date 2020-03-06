@@ -154,6 +154,13 @@ const AddTask = props => {
           console.log("success posting task", res);
           console.log("this is response from adding task", res)
           setAddingTask(true)
+          setNewTask({
+            professor_id: id,
+            student_id: activeStudent.student_id,
+            task:"",
+            due_date: Date()
+
+          })
           handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));
@@ -225,7 +232,7 @@ const AddTask = props => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        defaultValue="2020-05-24"
+                        defaultValue="05-24-2020"
                         autoFocus
                         helperText={
                           errors.date && touched.date

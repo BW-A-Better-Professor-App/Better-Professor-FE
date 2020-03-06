@@ -72,18 +72,16 @@ const useStyles = makeStyles(theme => ({
 }));
 const id = parseInt(localStorage.getItem('id'),10);
 const initialValues = {
-  firstname: "",
-  lastname: "",
-  email: "",
-  username: "",
-  password: "",
-  professor_id: id,
+  task: "",
+  due_date: Date.now(),
+  
 }
 
-const EditTaskForm = props => {
-  const { setEditing, taskToEdit, setTaskToEdit } = useContext(StudentFormContext)
+const EditTaskForm = ({task}) => {
+  const { setTaskEditing, studentList, activeStudent, setStudentList } = useContext(StudentFormContext)
   const classes = useStyles();
-  const student_id = activeStudent.id
+  const [edittedTask, setEditedTask] = useState(initialValues)
+  const student_id = activeStudent.student_id
   
   const [open, setOpen] = useState(false);
   
@@ -97,38 +95,51 @@ const EditTaskForm = props => {
     setOpen(false);
   };
 
-  const handleChange = event => {
-    editStudent(event.target.value);
-  };
+  // const handleChange = event => {
+  //   console.log("student editing", edittedTask)
+  //   edittedTask(event.target.value);
+  // };
+ 
+   
+ 
 
   useEffect(()=> {
-   
+    console.log('studentlist through context to edittedTask form', studentList )
     // const studentToEdit= studentList.find(student => student.student_id === activeStudent.id);
     console.log("Student to update", activeStudent);
 
-    if(activeStudent) {
-      setEditStudent(activeStudent);
+    if(task) {
+      setEditedTask({
+        task: task.task,
+        due_date: task.due_date
+      
+      });
       console.log("Student to update", activeStudent);
 
     }
 
-  }, [studentList, activeStudent])
+  }, [])
 
   
   const FormSubmit = (e) => {
     e.preventDefault()
-    console.log("These are values", editStudent);
+   
+    console.log("These are values", edittedTask);
+   
     // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .put(`/students/${activeStudent.student_id}`, editStudent)
+      .put(`/tasks/${task.task_id}`, edittedTask)
       .then(res => {
         console.log("response from put: ", res);
-        setStudentList(studentList);
-        setEditing(true);
-        handleClose()
+        
+      
+        setTaskEditing(true)
+        handleClose();
         })
-        .catch(error => console.log(error.response, "Didn't work"));
+        .catch(error => {
+          console.log(error.response, "Didn't work There was error")
+        });
 
   };
 
@@ -137,7 +148,7 @@ const EditTaskForm = props => {
       <CssBaseline />
       <div>
         <button type="button" onClick={handleOpen}>
-          Edit Student
+          Edit Task
         </button>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -154,7 +165,7 @@ const EditTaskForm = props => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
-                Edit student
+                Edit Task
               </Typography>
               <Formik
                 validationSchema={SignupSchema}
@@ -165,68 +176,31 @@ const EditTaskForm = props => {
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <TextField
-                        error={errors.firstname && touched.firstname}
-                        autoComplete="firstname"
-                        name="firstname"
+                        error={errors.task && touched.task}
+                        autoComplete="task"
+                        name="task"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setEditStudent({...editStudent, firstname: e.target.value})}
-                        value={editStudent.firstname}
-                        id="firstname"
-                        label="student's first name"
+                        onChange={(e) => setEditedTask({...edittedTask, task: e.target.value})}
+                        value={edittedTask.task}
+                        id="task"
+                        label="task"
                         autoFocus
                         helperText={
-                          errors.firstname && touched.firstname
-                            ? errors.firstname
+                          errors.task && touched.task
+                            ? errors.task
                             : null
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        error={errors.lastname && touched.lastname}
-                        autoComplete="lastname"
-                        name="lastname"
-                        variant="outlined"
-                        fullWidth
-                        onChange={(e) => setEditStudent({...editStudent, lastname: e.target.value})}
-                        value={editStudent.lastname}
-                        id="lastname"
-                        label="student's last name"
-                        autoFocus
-                        helperText={
-                          errors.lastname && touched.lastname
-                            ? errors.lastname
-                            : null
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        error={errors.email && touched.email}
-                        autoComplete="email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        onChange={(e) => setEditStudent({...editStudent, email: e.target.value})}
-                        value={editStudent.email}
-                        id="email"
-                        label="student's email"
-                        autoFocus
-                        helperText={
-                          errors.email && touched.email
-                            ? errors.email
-                            : null
-                        }
-                      />
-                    </Grid>
+
                     {/* <Grid item xs={12}>
                   <TextField
                     error={errors.username && touched.username}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setEditStudent({...editStudent, username: e.target.value})}
-                    value={editStudent.username}
+                    onChange={(e) => setEditedTask({...edittedTask, username: e.target.value})}
+                    value={edittedTask.username}
                     id="username"
                     label="username"
                     name="username"
@@ -243,8 +217,8 @@ const EditTaskForm = props => {
                     error={errors.password && touched.password}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setEditStudent({...editStudent, password: e.target.value})}
-                    value={editStudent.password}
+                    onChange={(e) => setEditedTask({...edittedTask, password: e.target.value})}
+                    value={edittedTask.password}
                     name="password"
                     label="Password"
                     type="password"
@@ -267,7 +241,7 @@ const EditTaskForm = props => {
                     onClick={FormSubmit}
                     onSubmit={handleClose}
                   >
-                    Edit Student
+                    Edit Task
                   </Button>
                 </Form>
               )}
@@ -280,4 +254,4 @@ const EditTaskForm = props => {
   );
 };
 
-export default EditStudentForm;
+export default EditTaskForm;
