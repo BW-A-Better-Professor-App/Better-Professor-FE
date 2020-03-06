@@ -192,7 +192,7 @@ const EditTaskForm = ({task}) => {
                       />
                     </Grid>
 
-                    {/* <Grid item xs={12}>
+                    {/* {/* <Grid item xs={12}>
                   <TextField
                     error={errors.username && touched.username}
                     variant="outlined"
@@ -209,26 +209,26 @@ const EditTaskForm = ({task}) => {
                         : null
                     }
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
-                    error={errors.password && touched.password}
+                    error={errors.due_date && touched.due_date}
                     variant="outlined"
                     fullWidth
-                    onChange={(e) => setEditedTask({...edittedTask, password: e.target.value})}
-                    value={edittedTask.password}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
+                    onChange={(e) => setEditedTask({...edittedTask, due_date: e.target.value})}
+                    value={edittedTask.due_date}
+                    name="due_date"
+                    label="due_date"
+                    type="date"
+                    id="due_date"
+                    autoComplete=""
                     helperText={
-                      errors.password && touched.password
-                        ? errors.password
+                      errors.due_date && touched.due_date
+                        ? errors.due_date
                         : null
                     }
                   />
-                </Grid> */}
+                </Grid>
                   </Grid>
                   <Button
                     type="submit"

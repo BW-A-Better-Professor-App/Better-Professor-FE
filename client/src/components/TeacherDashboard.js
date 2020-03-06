@@ -70,15 +70,12 @@ export default function TeacherDashboard() {
   
     return(
         <div className="Proffessor_dashboard">
-            {/* <StyledBtnDiv>
-            <StyledBtn>Add Student</StyledBtn>
-            <StyledBtn>View Student</StyledBtn>
-            </StyledBtnDiv> */}
+
             <StyledBtnDiv>
 
 
               
-              <StyledBtn><AddStudent /></StyledBtn>
+              <AddStudent />
             
 
             </StyledBtnDiv>

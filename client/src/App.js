@@ -28,7 +28,7 @@ const initialStudent = {
 
 
 const App = props => {
-  // let history = useHistory();
+
   const id = parseInt(localStorage.getItem('id'),10);
   const [student, setStudent ] = useState(initialStudent)
 
@@ -115,7 +115,6 @@ const App = props => {
         .then(res => {
           alert("Deleted Student")
           console.log("this is the response of delete: ", res)
-          // props.history.push("/dashboard")
           setIsActive(false)
           setAdding(true)
         })
@@ -166,8 +165,10 @@ const App = props => {
           
           console.log('this is the response from task get call for all', response)
           const filteredDeadlines= response.data.filter(data => data.task_id !== null)
+          const sortedDeadlines= filteredDeadlines.sort((a,b) => b.due_date-a.due_date);
+          console.log('this is the sorted Deadlines', sortedDeadlines)
           setTaskEditing(false);
-          setDeadlines(filteredDeadlines);
+          setDeadlines(sortedDeadlines);
           setIsActive(false)
 
       })

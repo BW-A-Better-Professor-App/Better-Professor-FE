@@ -26,9 +26,8 @@ const Login = () => {
         console.log('this is the response from post: ', res);
         console.log("token", res.data.token)
         window.localStorage.setItem('token', res.data.token);
-        window.localStorage.setItem('id', res.data.id)
-        // window.localStorage.setItem('professor_id', res.data.student.professor_id)
-        // window.localStorage.setItem('student_id', res.data.student.student_id)
+        window.localStorage.setItem('id', res.data.id);
+        window.localStorage.setItem('welcome', res.data.message);
         history.push('/dashboard');
       })  
       .catch(err => {
