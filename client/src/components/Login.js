@@ -118,7 +118,7 @@ const Container = styled.div`
             border-radius: 0.3rem;
             transition: all 100ms;
             box-shadow: 0px 2px 5px -5px;
-            letter-spacing: 0.1rem;
+            letter-spacing: 0.2rem;
         
             &:hover {
                 transition: background 100ms;
