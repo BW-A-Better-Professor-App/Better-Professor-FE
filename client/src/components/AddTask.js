@@ -11,12 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -26,15 +20,8 @@ import { Formik, Form } from "formik";
 import * as  yup from "yup";
 
 let SignupSchema = yup.object().shape({
-  firstname: yup.string().required("This field is required."),
-  lastname: yup.string().required("This field is required."),
-  email: yup.string().email('Invalid email address').required('Required'),
-  username: yup.string().required("This field is required."),
-  password: yup
-    .string()
-    .min(6, "Password is too short.")
-    .max(20, "Password is too long.")
-    .required("This field is required.")
+  date: yup.string().required("This field is required."),
+  task: yup.string().required("This field is required."),
 });
 
 const useStyles = makeStyles(theme => ({
@@ -78,14 +65,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const id = parseInt(localStorage.getItem('id'),10);
-const initialValues = {
-  student: "",
-  lastname: "",
-  email: "",
-  username: "",
-  password: "",
-  professor_id: id,
-}
+
 
 const AddTask = props => {
   const { setAddingTask, activeStudent } = useContext(StudentFormContext)
@@ -115,9 +95,9 @@ const AddTask = props => {
 
   const formatDate = (date) => {
     var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + (d.getDate()+1),
-        year = d.getFullYear();
+      month = '' + (d.getMonth() + 1),
+      day = '' + (d.getDate()+1),
+      year = d.getFullYear();
 
     if (month.length < 2) 
         month = '0' + month;
@@ -125,20 +105,8 @@ const AddTask = props => {
         day = '0' + day;
 
     return [year, month, day].join('-');
-}
+  }
 
-  // const dateFormatter = (newTask) = {
-
-  //   // console.log("this is task to format: ", newTask)
-
-
-
-
-
-   
-  //   return formmattedDate
-
-  // }
   const FormSubmit = (e) => {
     e.preventDefault()
 
@@ -148,7 +116,7 @@ const AddTask = props => {
     }
     console.log("These are values to be submitted for task", formattedTask);
     axiosWithAuth()
-    //register student to api with pot
+    //register student to api with post
       .post(`/tasks`, newTask)
         .then(res => {
           console.log("success posting task", res);
@@ -200,7 +168,7 @@ const AddTask = props => {
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <TextField
-                        error={errors.firstname && touched.firstname}
+                        error={errors.task && touched.task}
                         autoComplete="task"
                         name="task"
                         variant="outlined"
@@ -228,11 +196,12 @@ const AddTask = props => {
                         value={newTask.date}
                         id="date"
                         label="Select Date"
+                        type="date"
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        defaultValue="05-24-2020"
+                        // defaultValue="05-24-2020"
                         autoFocus
                         helperText={
                           errors.date && touched.date

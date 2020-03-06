@@ -11,12 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -191,25 +185,6 @@ const EditTaskForm = ({task}) => {
                         }
                       />
                     </Grid>
-
-                    {/* {/* <Grid item xs={12}>
-                  <TextField
-                    error={errors.username && touched.username}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setEditedTask({...edittedTask, username: e.target.value})}
-                    value={edittedTask.username}
-                    id="username"
-                    label="username"
-                    name="username"
-                    autoComplete="username"
-                    helperText={
-                      errors.username && touched.username
-                        ? errors.username
-                        : null
-                    }
-                  />
-                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     error={errors.due_date && touched.due_date}

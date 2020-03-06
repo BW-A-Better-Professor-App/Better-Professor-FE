@@ -11,11 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -86,14 +81,12 @@ const initialValues = {
 }
 
 const EditStudentForm = props => {
-  const { editing, setEditing, setTaskEditing, studentList, activeStudent, setStudentList, setActiveStudent } = useContext(StudentFormContext)
+  const { setTaskEditing, studentList, activeStudent } = useContext(StudentFormContext)
   const classes = useStyles();
   const [editStudent, setEditStudent] = useState(initialValues)
   const student_id = activeStudent.student_id
   
   const [open, setOpen] = useState(false);
-  
-  const studentArrayLength = 0;
 
   const handleOpen = () => {
     setOpen(true);
@@ -110,7 +103,6 @@ const EditStudentForm = props => {
 
   useEffect(()=> {
     console.log('studentlist through context to editstudent form', studentList )
-    // const studentToEdit= studentList.find(student => student.student_id === activeStudent.id);
     console.log("Student to update", activeStudent);
 
     if(activeStudent) {
@@ -129,9 +121,8 @@ const EditStudentForm = props => {
   const FormSubmit = (e) => {
     e.preventDefault()
     console.log("These are values", editStudent);
-    // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
-    //register student to api with pot
+    //register student to api with put
       .put(`/students/${student_id}`, editStudent)
       .then(res => {
         console.log("response from put: ", res);
@@ -172,7 +163,7 @@ const EditStudentForm = props => {
                 validationSchema={SignupSchema}
                 onSubmit={(e)=> FormSubmit()}
               >
-              {({ errors, handleChange, touched, status }) => (
+              {({ errors, touched }) => (
                 <Form className={classes.form}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -232,43 +223,6 @@ const EditStudentForm = props => {
                         }
                       />
                     </Grid>
-                    {/* <Grid item xs={12}>
-                  <TextField
-                    error={errors.username && touched.username}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setEditStudent({...editStudent, username: e.target.value})}
-                    value={editStudent.username}
-                    id="username"
-                    label="username"
-                    name="username"
-                    autoComplete="username"
-                    helperText={
-                      errors.username && touched.username
-                        ? errors.username
-                        : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={errors.password && touched.password}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setEditStudent({...editStudent, password: e.target.value})}
-                    value={editStudent.password}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    helperText={
-                      errors.password && touched.password
-                        ? errors.password
-                        : null
-                    }
-                  />
-                </Grid> */}
                   </Grid>
                   <Button
                     type="submit"

@@ -1,17 +1,12 @@
 import React, { useState, } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import Login from './Login'
 import { Link } from 'react-router-dom'
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 function Register(props) {
 
     let history = useHistory();
-
-   
-
     // state for new user to be created
     const [newUser, setNewUser] = useState({
         username: '',
@@ -19,7 +14,6 @@ function Register(props) {
         lastname: '',
         email: '',
         password: '',
-        // phone_number: ''
     });
 
     const [errorText, setErrorText] = useState('');
