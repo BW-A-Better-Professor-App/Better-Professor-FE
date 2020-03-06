@@ -50,16 +50,7 @@ export default function StudentList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {data.map(student => (
-              <TableRow key={student.id}>
-                {/* <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell> */}
-                {/* <TableCell align="center">{student.name}</TableCell> */}
 
-          {/* <section className="student-list">
-                {/* <SearchFrom /> */}
-                {/* <div> */}
                 <TableRow onClick={ev => resetActiveStudent(ev)}>
                   <TableCell align="center">All Students</TableCell>
                 </TableRow>
@@ -81,25 +72,6 @@ export default function StudentList() {
       </TableContainer>
     );
 
-    // return (
-    //     <section className="student-list">
-    //         {/* <SearchFrom /> */}
-    //         <div>
-    //          {data.map(student => (
-    //           <div key={data.id}>
-              
-    //             <h1>{student.name}</h1> 
-                
-                
-    //             {/* // assignments={student.assignments}
-    //             // dueDate={student.assignments.dueDates}
-    //             // notes={student.notes} */}
-              
-    //           </div>
-    //         ))}
-    //         </div>
-    //     </section>
-    // );
 }
 
 //needs to display a list of students.

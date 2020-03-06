@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import logo from './logo.svg';
-import { BrowserRouter as Router, Route, useHistory} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import { StudentFormContext } from './contexts/StudentFormContext'
 
@@ -28,7 +28,7 @@ const initialStudent = {
 
 
 const App = props => {
-  // let history = useHistory();
+
   const id = parseInt(localStorage.getItem('id'),10);
   const [student, setStudent ] = useState(initialStudent)
 
@@ -39,81 +39,20 @@ const App = props => {
   const [ adding, setAdding ] = useState(false);
 
   const [taskToEdit, setTaskToEdit] = useState({})
-  const [taskEditing, setTaskEditing] = useState(false)
+  const [taskEditing, setTaskEditing] = useState(false);
   const [ addingTask, setAddingTask ] = useState(false);
+  const [deletedTask, setDeletedTask] = useState(false);
 
   const [activeStudent, setActiveStudent] = useState({})
   const [ isActive, setIsActive ] = useState(false)
+  const [ isError, setIsError ] = useState(false)
 
   const [deadlines, setDeadlines] = useState([])
 
 
   // const [edit, setEdit] = useState(false)
 
-  useEffect(() => {
-    // setStudents(data);
-    // console.log("dummy students: ", students)
-      axiosWithAuth()
-      .get(`/users/all-students/${id}`)
-      .then(response => {
-          console.log('response of users on student list', response);
-            setStudentList(response.data.student);
-            // window.localStorage.setItem('professor_id', response.data.student.professor_id)
-            // window.localStorage.setItem('student_id', response.data.student.student_id)
-            setAdding(false)
-      })
-      .catch(err => {
-          console.log('error, go fix!', err);
-      })
-  }, [adding]);
-
-  //useEffect grabs student list and should update if new student is added or if student is edited
-  useEffect(()=> {
-    axiosWithAuth()
-    .get(`/users/all-students/${id}`)
-    .then(res => {
-      console.log("this is the response of gets", res);
-      setStudentList(res.data.student)
-
-    })
-    .catch(err => {
-      console.error("there was an error: ", err);
-    })
-
-  }, []);
-  //Grab single student projects or tasks
-  useEffect(() => {
-    console.log("get tasks coming");
-    if(!isActive){
-   
-      axiosWithAuth()
-      .get(`/tasks`)
-      .then(response => {
-          
-          console.log('this is the response from task get call for all', response)
-          setDeadlines(response.data);
-          setIsActive(false)
-
-      })
-      .catch(err => {
-          console.log('unable to fetch task projects', err);
-      })
-    }else{
-      axiosWithAuth()
-      .get(`/students/${activeStudent.student_id}/tasks`)
-      .then(response => {
-        
-          console.log('this is the response from task get call for a student', response)
-          setDeadlines(response.data.tasks);
-          setAddingTask(false);
-          setIsActive(true)
-      })
-      .catch(err => {
-          console.log('unable to fetch task projects', err);
-          // setDeadlines([])
-      })
-  } 
-}, [isActive, activeStudent, addingTask]);
+  
 
 
 
@@ -156,108 +95,115 @@ const App = props => {
     ev.preventDefault();
     setActiveStudent({});
     setIsActive(false);
+    setIsError(false)
 
     console.log("active student", activeStudent)
     console.log("isactive: ", isActive)
     
   }
 
-  const editTask = task => {
-    setTaskEditing(true);
-    setTaskToEdit(task);
-  };
 
-  //save the edit by doing a put call
-  const saveTaskEdit = e => {
-    e.preventDefault();
-
-    axiosWithAuth()
-      .put(`/tasks/${taskToEdit.task_id}`, taskToEdit)
-      .then(res => {
-        console.log("response from put: ", res);
-        setDeadlines(deadlines);
-        setTaskEditing(false);
-        // setEdit(true);
-      })
-      .catch(err => {
-        console.log("error: ", err);
-        
-      });
-  };
-
-
-  const handleChanges = e => {
-    setStudent({ ...student, [e.target.name]: e.target.value });
-  };
-
-  const submitForm = e => {
-      e.preventDefault();
-      addStudent(student);
-      setStudent({
-        username: '',
-        firstname: '',
-        lastname: '',
-        email: '',
-        password: '',
-    
-      })
-
-  };
 
   const deleteStudent = ev => {
     ev.preventDefault()
     console.log("student trying to delete: ", activeStudent)
+    const token = window.localStorage.getItem('token')
+    console.log("this is the token being used to delete: ", token)
 
     axiosWithAuth()
-        .delete(`/users/student/${activeStudent.student_id}`)
+        .delete(`/users/student/${activeStudent.student_id}`, token)
         .then(res => {
           alert("Deleted Student")
           console.log("this is the response of delete: ", res)
-          // props.history.push("/dashboard")
           setIsActive(false)
           setAdding(true)
         })
         .catch(err => alert("Error couldn't delete: ", err))
 
-        // .finally(() => window.location.reload())
   }
 
-  //add student that is passed in to the array of students by registering them.
-  const addStudent = student => {
-    const newStudent = {
-      username: student.username,
-      firstname: student.firstname,
-      lastname: student.lastname,
-      email: student.email,
-      password: student.password
-
-    }
-    axiosWithAuth()
-      .post('/auth/register', newStudent)
-      .then(res => {
-        console.log("this is the response", res);
-        props.history.push("/dashboard")
-        
-
-  
+ 
+  useEffect(() => {
+ 
+      axiosWithAuth()
+      .get(`/users/all-students/${id}`)
+      .then(response => {
+          console.log('response of users on student list', response);
+            setStudentList(response.data.student);
+          
+            setAdding(false);
       })
       .catch(err => {
-        console.error("there was an error: ", err);
+          console.log('error, go fix!', err);
       })
+  }, [adding]);
 
-    console.log("this is student list", studentList)
-    
-  }
+  //useEffect grabs student list and should update if new student is added or if student is edited
+  useEffect(()=> {
+    axiosWithAuth()
+    .get(`/users/all-students/${id}`)
+    .then(res => {
+      console.log("this is the response of gets", res);
+      setStudentList(res.data.student)
+
+    })
+    .catch(err => {
+      console.error("there was an error: ", err);
+    })
+
+  }, []);
 
 
+  //Grab single student projects or tasks
+  useEffect(() => {
+    console.log("get tasks coming");
+    if(!isActive){
+   
+      axiosWithAuth()
+      .get(`/tasks`)
+      .then(response => {
+          
+          console.log('this is the response from task get call for all', response)
+          const filteredDeadlines= response.data.filter(data => data.task_id !== null)
+          const sortedDeadlines= filteredDeadlines.sort((a,b) => b.due_date-a.due_date);
+          console.log('this is the sorted Deadlines', sortedDeadlines)
+          setTaskEditing(false);
+          setDeadlines(sortedDeadlines);
+          setIsActive(false)
+
+      })
+      .catch(err => {
+          console.log('unable to fetch task projects', err);
+      })
+    }else{
+      axiosWithAuth()
+      .get(`/students/${activeStudent.student_id}/tasks`)
+      .then(response => {
+        
+          console.log('this is the response from task get call for a student', response)
+          
+          setDeadlines(response.data.tasks);
+          setAddingTask(false);
+          setIsActive(true);
+          setTaskEditing(false);
+      })
+      .catch(err => {
+          console.log('unable to fetch task projects', err);
+          setIsActive(false);
+          setIsError(true);
+          // setDeadlines([])
+      })
+  } 
+}, [isActive, activeStudent, addingTask, taskEditing]);
 
 
 
   return (
     <div className="App">
-      <StudentFormContext.Provider value = {{setAddingTask, taskToEdit, setTaskToEdit, studentList, setStudentList, deleteStudent,  adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive,setIsActive, deadlines, setDeadlines }}>
+      <StudentFormContext.Provider value = {{setAddingTask, taskToEdit, setTaskEditing, isError, setTaskToEdit, studentList, setStudentList, deleteStudent,  adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive,setIsActive, deadlines, setDeadlines}}>
         <Router>
           <Header />
+          <Switch>
           <Route  exact path = '/'>
             <Register/>
           </Route>
@@ -272,25 +218,25 @@ const App = props => {
           <PrivateRoute  exact path = '/dashboard'>
             <TeacherDashboard/>
           </PrivateRoute>
-          <PrivateRoute path="/student-dashboard/">
+          {/* <PrivateRoute path="/student-dashboard/">
             <StudentList />
           </PrivateRoute>
           <PrivateRoute path="/student-dashboard/:id">
             <StudentCard/>
-          </PrivateRoute>
+          </PrivateRoute> */}
 
 
-          <PrivateRoute path="/student-registration/">
+          {/* <PrivateRoute path="/student-registration/">
             <AddStudent />
-          </PrivateRoute>
+          </PrivateRoute> */}
 
           <PrivateRoute path="/student-details">
             <StudentDetails/>
           </PrivateRoute>
 
-          <Route  exact path = '/'>
-            <Register/>
-          </Route>
+      
+          <Route render={() => (<h2>Not Found</h2>)} />
+          </Switch>
 
 
         </Router>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const Login = () => {
@@ -26,9 +26,8 @@ const Login = () => {
         console.log('this is the response from post: ', res);
         console.log("token", res.data.token)
         window.localStorage.setItem('token', res.data.token);
-        window.localStorage.setItem('id', res.data.id)
-        // window.localStorage.setItem('professor_id', res.data.student.professor_id)
-        // window.localStorage.setItem('student_id', res.data.student.student_id)
+        window.localStorage.setItem('id', res.data.id);
+        window.localStorage.setItem('welcome', res.data.message);
         history.push('/dashboard');
       })  
       .catch(err => {
@@ -58,6 +57,9 @@ const Login = () => {
           className=''
         />
         <button className=''>Login</button>
+        <div className="extra-options">
+          <Link to= '/Login/Student' className="FormField_Link">Not a Teacher? Login As Student Here</Link>
+        </div>
       </form>
 		</div>
   );
