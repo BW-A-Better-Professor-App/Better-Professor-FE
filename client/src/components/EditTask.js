@@ -104,9 +104,7 @@ const EditTaskForm = ({task}) => {
  
 
   useEffect(()=> {
-    console.log('studentlist through context to edittedTask form', studentList )
-    // const studentToEdit= studentList.find(student => student.student_id === activeStudent.id);
-    console.log("Student to update", activeStudent);
+
 
     if(task) {
       setEditedTask({
@@ -114,7 +112,7 @@ const EditTaskForm = ({task}) => {
         due_date: task.due_date
       
       });
-      console.log("Student to update", activeStudent);
+      console.log("task to update", task);
 
     }
 

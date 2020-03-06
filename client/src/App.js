@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import logo from './logo.svg';
-import { BrowserRouter as Router, Route, useHistory} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import { StudentFormContext } from './contexts/StudentFormContext'
 
@@ -102,55 +102,16 @@ const App = props => {
     
   }
 
-  // const editTask = task => {
-  //   setTaskEditing(true);
-  //   setTaskToEdit(task);
-  // };
 
-  //save the edit by doing a put call
-  // const saveTaskEdit = e => {
-  //   e.preventDefault();
-
-  //   axiosWithAuth()
-  //     .put(`/tasks/${taskToEdit.task_id}`, taskToEdit)
-  //     .then(res => {
-  //       console.log("response from put: ", res);
-  //       setDeadlines(deadlines);
-  //       setTaskEditing(false);
-  //       setAddingTask(true);
-  //       setDeletedTask(true);
-  //     })
-  //     .catch(err => {
-  //       console.log("error: ", err);
-        
-  //     });
-  // };
-
-
-  // const handleChanges = e => {
-  //   setStudent({ ...student, [e.target.name]: e.target.value });
-  // };
-
-  // const submitForm = e => {
-  //     e.preventDefault();
-  //     addStudent(student);
-  //     setStudent({
-  //       username: '',
-  //       firstname: '',
-  //       lastname: '',
-  //       email: '',
-  //       password: '',
-    
-  //     })
-
-  // };
 
   const deleteStudent = ev => {
     ev.preventDefault()
     console.log("student trying to delete: ", activeStudent)
+    const token = window.localStorage.getItem('token')
+    console.log("this is the token being used to delete: ", token)
 
     axiosWithAuth()
-        .delete(`/users/student/${activeStudent.student_id}`)
+        .delete(`/users/student/${activeStudent.student_id}`, token)
         .then(res => {
           alert("Deleted Student")
           console.log("this is the response of delete: ", res)
@@ -160,52 +121,9 @@ const App = props => {
         })
         .catch(err => alert("Error couldn't delete: ", err))
 
-        // .finally(() => window.location.reload())
   }
 
-  // const deleteTask = (ev, task) => {
-  //   ev.preventDefault()
-  //   console.log("task trying to delete: ", task)
-
-  //   axiosWithAuth()
-  //       .delete(`/tasks/${task.task_id}`)
-  //       .then(res => {
-  //         alert("Deleted Task")
-  //         console.log("this is the response of delete task: ", res)
-  //         setAdding(true)
-  //         setTaskEditing(true);
-  //       })
-  //       .catch(err => alert("Error couldn't delete: ", err))
-
-  // }
-
-  //add student that is passed in to the array of students by registering them.
-  // const addStudent = student => {
-  //   const newStudent = {
-  //     username: student.username,
-  //     firstname: student.firstname,
-  //     lastname: student.lastname,
-  //     email: student.email,
-  //     password: student.password
-
-  //   }
-  //   axiosWithAuth()
-  //     .post('/auth/register', newStudent)
-  //     .then(res => {
-  //       console.log("this is the response", res);
-  //       props.history.push("/dashboard")
-        
-
-  
-  //     })
-  //     .catch(err => {
-  //       console.error("there was an error: ", err);
-  //     })
-
-  //   console.log("this is student list", studentList)
-    
-  // }
-
+ 
   useEffect(() => {
  
       axiosWithAuth()
@@ -213,8 +131,7 @@ const App = props => {
       .then(response => {
           console.log('response of users on student list', response);
             setStudentList(response.data.student);
-            // window.localStorage.setItem('professor_id', response.data.student.professor_id)
-            // window.localStorage.setItem('student_id', response.data.student.student_id)
+          
             setAdding(false);
       })
       .catch(err => {
@@ -248,8 +165,9 @@ const App = props => {
       .then(response => {
           
           console.log('this is the response from task get call for all', response)
+          const filteredDeadlines= response.data.filter(data => data.task_id !== null)
           setTaskEditing(false);
-          setDeadlines(response.data);
+          setDeadlines(filteredDeadlines);
           setIsActive(false)
 
       })
@@ -262,7 +180,7 @@ const App = props => {
       .then(response => {
         
           console.log('this is the response from task get call for a student', response)
-          // const filteredDeadlines= response.data.filter(student => student.id === activeStudent.id)
+          
           setDeadlines(response.data.tasks);
           setAddingTask(false);
           setIsActive(true);
@@ -284,6 +202,7 @@ const App = props => {
       <StudentFormContext.Provider value = {{setAddingTask, taskToEdit, setTaskEditing, isError, setTaskToEdit, studentList, setStudentList, deleteStudent,  adding, setAdding, makeStudentActive, resetActiveStudent, activeStudent, isActive,setIsActive, deadlines, setDeadlines}}>
         <Router>
           <Header />
+          <Switch>
           <Route  exact path = '/'>
             <Register/>
           </Route>
@@ -313,6 +232,10 @@ const App = props => {
           <PrivateRoute path="/student-details">
             <StudentDetails/>
           </PrivateRoute>
+
+      
+          <Route render={() => (<h2>Not Found</h2>)} />
+          </Switch>
 
 
         </Router>

@@ -19,9 +19,11 @@ const StudentCard = props => {
 
   const deleteTask = (ev, task) => {
     ev.preventDefault()
+    const token = window.localStorage.getItem('token')
     console.log("task trying to delete: ", task)
 
     axiosWithAuth()
+  
         .delete(`/tasks/${task.task_id}`)
         .then(res => {
           alert("Deleted Task")
