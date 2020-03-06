@@ -125,39 +125,43 @@ const App = props => {
 
   }
 
-  //useEffect grabs student list and should update if new student is added or if student is edited
+  //grabs messages for student
   useEffect(() => {
  
       axiosWithAuth()
-      .get(`/users/all-students/${id}`)
+      .get(`/students/${activeStudent.student_id}/messages`)
       .then(response => {
-          console.log('response of users on student list', response);
-            setStudentList(response.data.student);
+          console.log('response of messages for active student', response);
+            // setStudentList(response.data.student);
+            setMessages(response.data.messages)
           
-            setAdding(false);
+            // setAdding(false);
       })
       .catch(err => {
           console.log('error, go fix!', err);
       })
-  }, [adding]);
+  }, [activeStudent]);
+//useEffect grabs student list and should update if new student is added or if student is edited
+  
+  useEffect(() => {
+ 
+    axiosWithAuth()
+    .get(`/users/all-students/${id}`)
+    .then(response => {
+        console.log('response of users on student list', response);
+          setStudentList(response.data.student);
+        
+          setAdding(false);
+    })
+    .catch(err => {
+        console.log('error, go fix!', err);
+    })
+}, [adding]);
 
-  //useEffect grabs student list and should update if new student is added or if student is edited
-  // useEffect(()=> {
-  //   axiosWithAuth()
-  //   .get(`/users/all-students/${id}`)
-  //   .then(res => {
-  //     console.log("this is the response of gets", res);
-  //     setStudentList(res.data.student)
-
-  //   })
-  //   .catch(err => {
-  //     console.error("there was an error: ", err);
-  //   })
-
-  // }, []);
 
 
-  //Grab single student projects or tasks
+
+  //Grab all task if no active student but if active student only grabs single student projects or tasks
   useEffect(() => {
     console.log("get tasks coming");
     if(!isActive){
@@ -226,10 +230,10 @@ const App = props => {
           <PrivateRoute  exact path = '/dashboard'>
             <TeacherDashboard/>
           </PrivateRoute>
-          {/* <PrivateRoute path="/student-dashboard/">
+          <PrivateRoute path="/student-dashboard/">
             <StudentList />
           </PrivateRoute>
-          <PrivateRoute path="/student-dashboard/:id">
+          {/* <PrivateRoute path="/student-dashboard/:id">
             <StudentCard/>
           </PrivateRoute> */}
 
