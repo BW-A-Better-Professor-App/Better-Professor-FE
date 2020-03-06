@@ -4,6 +4,8 @@ import Moment from 'react-moment';
 import AddTask from "./AddTask";
 import EditStudentForm from "./EditStudentForm";
 import EditTaskForm from "./EditTask";
+import AddMessage from "./AddMessage"
+import MessageList from "./MessageList"
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 // import EditStudentForm from './EditStudentForm'
@@ -11,7 +13,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const StudentCard = props => {
 
-  const { activeStudent, deadlines, deleteStudent, setTaskEditing } = useContext(StudentFormContext)
+  const { activeStudent, deadlines, deleteStudent, setTaskEditing, messages } = useContext(StudentFormContext)
   console.log()
 
   
@@ -48,8 +50,9 @@ const StudentCard = props => {
                   <p align="center">{deadline.task}</p>
                   <p align="center"><Moment format="MM/DD/YYYY">{deadline.due_date}</Moment></p>
                   <EditTaskForm task = {deadline} />
+                  <AddMessage task = {deadline} />
                   <button onClick={ev => deleteTask(ev, deadline)}>Delete Project</button>
-
+                  <MessageList />
                 </div>
               ))}
     </div>

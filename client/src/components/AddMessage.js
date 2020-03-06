@@ -77,20 +77,24 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
-const id = parseInt(localStorage.getItem('id'),10);
-const initialValues = {
-  firstname: "",
-  lastname: "",
-  email: "",
-  username: "",
-  password: "",
-  professor_id: id,
-}
 
-const AddStudent = props => {
-  const { setAdding, adding, setIsActive } = useContext(StudentFormContext)
+// const initialValues = {
+//   message:"",
+//   task_id:"",
+//   professor_id: id,
+//   student_id: activeStudent.student_id
+// }
+
+const AddMessage = ({task}) => {
+  const { setAdding, adding, setIsActive, activeStudent, setTaskEditing } = useContext(StudentFormContext)
+  const id = parseInt(localStorage.getItem('id'),10);
   const classes = useStyles();
-  const [studentInfo, setStudentInfo] = useState(initialValues)
+  const [message, setMessage] = useState({
+    message:"",
+    task_id:task.task_id,
+    professor_id: id,
+    student_id: activeStudent.student_id
+  })
   
   const [open, setOpen] = useState(false);
   
@@ -105,21 +109,20 @@ const AddStudent = props => {
   };
 
   const handleChange = event => {
-    setStudentInfo(event.target.value);
+    setMessage(event.target.value);
   };
 
   const FormSubmit = (e) => {
     e.preventDefault()
-    console.log("These are values", studentInfo);
-    // setStudentInfo({...studentInfo, professor_id: {id} })
+    console.log("These are what we are trying to post to message", message);
+    // setMessage({...message, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .post(`/students`, studentInfo)
+      .post(`/messages`, message)
         .then(res => {
           console.log("success", res);
           console.log("this is response from add student", res)
-          setIsActive(false);
-          setAdding(!adding)
+          setTaskEditing(true)
           handleClose()
         })
         .catch(error => console.log(error.response, "Didn't work"));
@@ -131,7 +134,7 @@ const AddStudent = props => {
       <CssBaseline />
       <div>
         <button type="button" onClick={handleOpen}>
-          Add Student
+          Add Message To Student
         </button>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -148,7 +151,7 @@ const AddStudent = props => {
           <Fade in={open}>
             <div className={classes.paper}>
               <Typography component="h1" variant="h5">
-                Add student
+                Add Message To Student
               </Typography>
               <Formik
                 validationSchema={SignupSchema}
@@ -159,15 +162,15 @@ const AddStudent = props => {
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <TextField
-                        error={errors.firstname && touched.firstname}
-                        autoComplete="firstname"
-                        name="firstname"
+                        error={errors.message && touched.message}
+                        autoComplete="message"
+                        name="message"
                         variant="outlined"
                         fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, firstname: e.target.value})}
-                        value={studentInfo.firstname}
-                        id="firstname"
-                        label="student's first name"
+                        onChange={(e) => setMessage({...message, message: e.target.value})}
+                        value={message.firstname}
+                        id="message"
+                        label="message"
                         autoFocus
                         helperText={
                           errors.firstname && touched.firstname
@@ -176,81 +179,7 @@ const AddStudent = props => {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        error={errors.lastname && touched.lastname}
-                        autoComplete="lastname"
-                        name="lastname"
-                        variant="outlined"
-                        fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, lastname: e.target.value})}
-                        value={studentInfo.lastname}
-                        id="lastname"
-                        label="student's last name"
-                        autoFocus
-                        helperText={
-                          errors.lastname && touched.lastname
-                            ? errors.lastname
-                            : null
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        error={errors.email && touched.email}
-                        autoComplete="email"
-                        name="email"
-                        variant="outlined"
-                        fullWidth
-                        onChange={(e) => setStudentInfo({...studentInfo, email: e.target.value})}
-                        value={studentInfo.email}
-                        id="email"
-                        label="student's email"
-                        autoFocus
-                        helperText={
-                          errors.email && touched.email
-                            ? errors.email
-                            : null
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                  <TextField
-                    error={errors.username && touched.username}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, username: e.target.value})}
-                    value={studentInfo.username}
-                    id="username"
-                    label="username"
-                    name="username"
-                    autoComplete="uname"
-                    helperText={
-                      errors.username && touched.username
-                        ? errors.username
-                        : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    error={errors.password && touched.password}
-                    variant="outlined"
-                    fullWidth
-                    onChange={(e) => setStudentInfo({...studentInfo, password: e.target.value})}
-                    value={studentInfo.password}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    helperText={
-                      errors.password && touched.password
-                        ? errors.password
-                        : null
-                    }
-                  />
-                </Grid>
+                    
                   </Grid>
                   <Button
                     type="submit"
@@ -274,4 +203,4 @@ const AddStudent = props => {
   );
 };
 
-export default AddStudent;
+export default AddMessage;
