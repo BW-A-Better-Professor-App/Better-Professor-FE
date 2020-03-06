@@ -53,34 +53,8 @@ const App = props => {
   const [messageToAdd, setMessageToAdd] = useState("");
 
 
-  // const [edit, setEdit] = useState(false)
-
-  
 
 
-
-  //function that when called sets editing to true and sets StudentToEdit to student that is passed in 
-  // const editStudent = student => {
-  //   setEditing(true);
-  //   setStudentToEdit(student);
-  // };
-
-  // //save the edit by doing a put call
-  // const saveEdit = e => {
-  //   e.preventDefault();
-
-  //   axiosWithAuth()
-  //     .put(`/students/${studentToEdit.student_id}`, studentToEdit)
-  //     .then(res => {
-  //       console.log("response from put: ", res);
-  //       setStudentList(studentList);
-  //       setEditing(!editing);
-  //       // setEdit(true);
-  //     })
-  //     .catch(err => {
-  //       console.log("error: ", err);
-  //     });
-  // };
 
   
   const makeStudentActive = (ev, student) => {
@@ -129,11 +103,12 @@ const App = props => {
   useEffect(() => {
  
       axiosWithAuth()
-      .get(`/students/${activeStudent.student_id}/messages`)
+      // .get(`/students/${activeStudent.student_id}/messages`)
+      .get(`/messages`)
       .then(response => {
           console.log('response of messages for active student', response);
             // setStudentList(response.data.student);
-            setMessages(response.data.messages)
+            setMessages(response.data)
           
             // setAdding(false);
       })

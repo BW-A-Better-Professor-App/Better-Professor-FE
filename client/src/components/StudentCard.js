@@ -8,13 +8,9 @@ import AddMessage from "./AddMessage"
 import MessageList from "./MessageList"
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
-// import EditStudentForm from './EditStudentForm'
-
-
 const StudentCard = props => {
 
   const { activeStudent, deadlines, deleteStudent, setTaskEditing, messages } = useContext(StudentFormContext)
-  console.log()
 
   
   console.log('this is first name: ', activeStudent.firstname)
@@ -25,14 +21,13 @@ const StudentCard = props => {
     console.log("task trying to delete: ", task)
 
     axiosWithAuth()
-  
-        .delete(`/tasks/${task.task_id}`)
-        .then(res => {
-          alert("Deleted Task")
-          console.log("this is the response of delete task: ", res)
-          setTaskEditing(true);
-        })
-        .catch(err => alert("Error couldn't delete: ", err))
+    .delete(`/tasks/${task.task_id}`)
+    .then(res => {
+      alert("Deleted Task")
+      console.log("this is the response of delete task: ", res)
+      setTaskEditing(true);
+    })
+    .catch(err => alert("Error couldn't delete: ", err))
 
   }
   return (
@@ -41,20 +36,22 @@ const StudentCard = props => {
       <EditStudentForm />
       <button onClick={ev => deleteStudent(ev)}>Delete Student</button>
       <AddTask />
-
-      {/* <EditStudentForm/> */}
+      
       
       {deadlines.map(deadline => (
-                <div key={deadline.task_id }>
-                  <p align="center">{deadline.firstname} {deadline.lastname} </p>
-                  <p align="center">{deadline.task}</p>
-                  <p align="center"><Moment format="MM/DD/YYYY">{deadline.due_date}</Moment></p>
-                  <EditTaskForm task = {deadline} />
-                  <AddMessage task = {deadline} />
-                  <button onClick={ev => deleteTask(ev, deadline)}>Delete Project</button>
-                  <MessageList />
-                </div>
-              ))}
+        <div key={deadline.task_id }>
+          <p align="center">{deadline.firstname} {deadline.lastname} </p>
+          <p align="center">{deadline.task}</p>
+          <p align="center"><Moment format="MM/DD/YYYY">{deadline.due_date}</Moment></p>
+          <EditTaskForm task = {deadline} />
+          <AddMessage task = {deadline} />
+        
+          
+          <button onClick={ev => deleteTask(ev, deadline)}>Delete Project</button>
+          <MessageList task = {deadline}/>
+        </div>
+        
+      ))}
     </div>
   );
 };

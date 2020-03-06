@@ -23,17 +23,33 @@ import cuid from 'cuid';
 // import data from './data.js'
 
 
-const MessageList = props => {
+const MessageList = ({task}) => {
   const id = parseInt(localStorage.getItem('id'),10);
-    const { messages } = useContext(StudentFormContext)
+    const { messages, activeStudent, setTaskEditing } = useContext(StudentFormContext)
 
     // const [students, setStudents] =  useState([])
     const history = useHistory();
     console.log("this is the message list from context to messagelist.js", messages)
 
 
+    const filteredMessage = messages.filter(message => message.task_id === task.task_id);
+    console.log("this is the filtered messages by task", filteredMessage)
 
-
+    const deleteMessage = (ev, message) => {
+      ev.preventDefault()
+      const token = window.localStorage.getItem('token')
+      console.log("task trying to delete: ", message)
+  
+      axiosWithAuth()
+      .delete(`/messages/${message.id}`)
+      .then(res => {
+        alert("Deleted Message")
+        console.log("this is the response of delete task: ", res)
+        setTaskEditing(true);
+      })
+      .catch(err => alert("Error couldn't delete: ", err))
+  
+    }
 
     return (
 
@@ -47,10 +63,13 @@ const MessageList = props => {
           </TableHead>
           <TableBody>
 
-                {messages.map(message => (
-                  <TableRow key={cuid()}>
+                {filteredMessage.map(message => (
+                  <TableRow key={message.id}>
+
+                    
                   
-                    <TableCell>{message.message_from_prof}</TableCell> 
+                    <TableCell>{message.message}</TableCell>
+                    <button onClick={ev => deleteMessage(ev, message)}>Delete Message</button> 
                     </TableRow>
                   
                 
