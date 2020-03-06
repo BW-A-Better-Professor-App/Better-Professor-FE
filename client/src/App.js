@@ -38,16 +38,19 @@ const App = props => {
   const [studentToEdit, setStudentToEdit] = useState(initialStudent);
   const [ adding, setAdding ] = useState(false);
 
-  const [taskToEdit, setTaskToEdit] = useState({})
+  const [taskToEdit, setTaskToEdit] = useState({});
   const [taskEditing, setTaskEditing] = useState(false);
   const [ addingTask, setAddingTask ] = useState(false);
   const [deletedTask, setDeletedTask] = useState(false);
 
-  const [activeStudent, setActiveStudent] = useState({})
-  const [ isActive, setIsActive ] = useState(false)
-  const [ isError, setIsError ] = useState(false)
+  const [activeStudent, setActiveStudent] = useState({});
+  const [ isActive, setIsActive ] = useState(false);
+  const [ isError, setIsError ] = useState(false);
 
-  const [deadlines, setDeadlines] = useState([])
+  const [deadlines, setDeadlines] = useState([]);
+
+  const [messages, setMessages] = useState([]);
+  const [messageToAdd, setMessageToAdd] = useState("");
 
 
   // const [edit, setEdit] = useState(false)
@@ -122,7 +125,7 @@ const App = props => {
 
   }
 
- 
+  //useEffect grabs student list and should update if new student is added or if student is edited
   useEffect(() => {
  
       axiosWithAuth()
@@ -139,19 +142,19 @@ const App = props => {
   }, [adding]);
 
   //useEffect grabs student list and should update if new student is added or if student is edited
-  useEffect(()=> {
-    axiosWithAuth()
-    .get(`/users/all-students/${id}`)
-    .then(res => {
-      console.log("this is the response of gets", res);
-      setStudentList(res.data.student)
+  // useEffect(()=> {
+  //   axiosWithAuth()
+  //   .get(`/users/all-students/${id}`)
+  //   .then(res => {
+  //     console.log("this is the response of gets", res);
+  //     setStudentList(res.data.student)
 
-    })
-    .catch(err => {
-      console.error("there was an error: ", err);
-    })
+  //   })
+  //   .catch(err => {
+  //     console.error("there was an error: ", err);
+  //   })
 
-  }, []);
+  // }, []);
 
 
   //Grab single student projects or tasks
@@ -169,32 +172,37 @@ const App = props => {
           console.log('this is the sorted Deadlines', sortedDeadlines)
           setTaskEditing(false);
           setDeadlines(sortedDeadlines);
-          setIsActive(false)
+          // setIsActive(false)
 
       })
       .catch(err => {
           console.log('unable to fetch task projects', err);
+          // setIsActive(true);//was set to false
       })
     }else{
       axiosWithAuth()
-      .get(`/students/${activeStudent.student_id}/tasks`)
+     
+      .get(`/tasks`)
       .then(response => {
         
           console.log('this is the response from task get call for a student', response)
+          const studentFilteredDeadlines= response.data.filter(data => data.lastname === activeStudent.lastname && data.task_id !== null)
+          // const sortedDeadlines= filteredDeadlines.sort((a,b) => b.due_date-a.due_date);
+          console.log('this is the filtered student Deadlines', studentFilteredDeadlines)
           
-          setDeadlines(response.data.tasks);
+          setDeadlines(studentFilteredDeadlines);
           setAddingTask(false);
           setIsActive(true);
           setTaskEditing(false);
       })
       .catch(err => {
           console.log('unable to fetch task projects', err);
-          setIsActive(false);
+          setIsActive(true);//was set to false
           setIsError(true);
           // setDeadlines([])
       })
   } 
-}, [isActive, activeStudent, addingTask, taskEditing]);
+}, [activeStudent, addingTask, taskEditing]);
 
 
 

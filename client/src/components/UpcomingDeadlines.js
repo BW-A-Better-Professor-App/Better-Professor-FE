@@ -72,6 +72,7 @@ export default function UpcomingDeadlines() {
                </div>
 
             )}else{
+              console.log("This is the deadlines", deadlines)
 
     // return(
     //     <div className='upcoming-deadlines'>
@@ -107,7 +108,7 @@ export default function UpcomingDeadlines() {
                   {/* </TableCell> */} 
                   <TableCell align="center">{deadline.firstname} {deadline.lastname} </TableCell>
                   <TableCell align="center">{deadline.task}</TableCell>
-                  <TableCell align="center"><Moment format="MM/DD/YYYY" >{deadline.due_date}</Moment></TableCell>
+                  <TableCell align="center"><Moment add={{ days: 1}} format="MM/DD/YYYY" >{deadline.due_date}</Moment></TableCell>
                   <TableCell align="center"><StyledBtn>View</StyledBtn></TableCell>
 
                 </TableRow>
