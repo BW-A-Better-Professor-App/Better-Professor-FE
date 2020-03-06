@@ -86,7 +86,7 @@ const initialValues = {
 }
 
 const EditStudentForm = props => {
-  const { setEditing, studentList, activeStudent, setStudentList } = useContext(StudentFormContext)
+  const { editing, setEditing, setTaskEditing, studentList, activeStudent, setStudentList, setActiveStudent } = useContext(StudentFormContext)
   const classes = useStyles();
   const [editStudent, setEditStudent] = useState(initialValues)
   const student_id = activeStudent.student_id
@@ -120,7 +120,7 @@ const EditStudentForm = props => {
         email: activeStudent.email
       });
       console.log("Student to update", activeStudent);
-
+      
     }
 
   }, [studentList, activeStudent])
@@ -132,12 +132,13 @@ const EditStudentForm = props => {
     // setStudentInfo({...studentInfo, professor_id: {id} })
     axiosWithAuth()
     //register student to api with pot
-      .put(`/users/students/${student_id}`, editStudent)
+      .put(`/students/${student_id}`, editStudent)
       .then(res => {
         console.log("response from put: ", res);
-        setStudentList(studentList);
-        setEditing(true);
-        handleClose()
+        
+      
+        setTaskEditing(true)
+        handleClose();
         })
         .catch(error => console.log(error.response, "Didn't work"));
 
