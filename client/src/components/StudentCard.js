@@ -10,7 +10,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const StudentCard = props => {
 
-  const { activeStudent, deadlines, deleteStudent, setTaskEditing, messages } = useContext(StudentFormContext)
+  const { activeStudent, deadlines, deleteStudent, setTaskEditing } = useContext(StudentFormContext)
 
   console.log('this is first name: ', activeStudent.firstname)
 

@@ -72,15 +72,12 @@ export default function TeacherDashboard() {
         <StyledBtnDiv>
           <AddStudent />
         </StyledBtnDiv>
-        <PrivateRoute path="/student-details">
-          <StudentDetails/>
-        </PrivateRoute>
         <StyledDiv> 
           <StudentListDiv>
             <StudentList />
           </StudentListDiv>
           <TaskTableDiv>
-            {!isActive ? ( // || isError removed so it can go to student
+            {(!isActive) ? ( // || isError removed so it can go to student
               <UpcomingDeadlines />
             ) : (
               <StudentCard/>
